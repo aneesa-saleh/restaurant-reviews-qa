@@ -1,7 +1,7 @@
 # Restaurants Reviews QA
 
 ## Introduction
-This is a Quality Assurance (QA) project for a [Restaurant Reviews](https://restaurant-reviews.glitch.me/) web application. The purpose of this project is to assess its quality, accessibility and offline capabilities.
+This is a Quality Assurance (QA) project for a [Restaurant Reviews](https://restaurant-reviews.glitch.me/) web application. The purpose of this project is to test core functionalities, as well as assess accessibility and offline capabilities.
 
 ## Components
 The project has 4 main components:
