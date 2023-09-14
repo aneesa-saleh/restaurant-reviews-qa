@@ -1,0 +1,17 @@
+{
+  "name": "restaurant-reviews-qa",
+  "version": "1.0.0",
+  "description": "QA Project for Restaurant Reviews Web App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "qa"
+  ],
+  "author": "Aneesa Saleh",
+  "license": "MIT",
+  "dependencies": {
+    "cypress": "^13.2.0"
+  }
+}
