@@ -16,7 +16,7 @@ The project has 4 main components:
 All user stories and test cases were created using [JIRA](https://www.atlassian.com/software/jira) and [Zephyr Scale](https://smartbear.com/test-management/zephyr-scale/). They have been exported to the `test-docs` folder as spreadsheets.
 
 ## Reports
-All reports can be found in the `reports` folder. Bug reports are in `reports/bugs`.
+All reports can be found in the `reports` folder. Bug reports are in [`reports/bugs`](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/reports/bugs).
 
 ## Accessibility Testing
 Accessibility tests are performed using [XRAY](https://www.getxray.app/exploratory-testing). Reports and recordings will be made available shortly.
