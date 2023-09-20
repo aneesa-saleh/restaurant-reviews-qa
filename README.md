@@ -11,14 +11,13 @@ The project has 4 main components:
 3. Manual tests for offline capability
 4. A comprehensive bug report for a key functionality that recently stopped working
 
-## Test docs
-
-All user stories and test cases were created using [JIRA](https://www.atlassian.com/software/jira) and [Zephyr Scale](https://smartbear.com/test-management/zephyr-scale/). They have been exported to the `test-docs` folder as spreadsheets.
-
 ## Documents
 
 ### User stories
-All user stories are saved in pdf files exported from JIRA. There is a detailed list of user stories including acceptance criteria [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-details.pdf). Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-summary.pdf) for a summarised version of the list.
+User stories are saved in pdf files exported from [JIRA](https://www.atlassian.com/software/jira). There is a detailed list of user stories including acceptance criteria [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-details.pdf). Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-summary.pdf) for a summarised version of the list.
+
+### Test cases (manual)
+Test cases were created using JIRA and [Zephyr Scale](https://smartbear.com/test-management/zephyr-scale/). They have been exported to the `test-cases` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-tests.xlsx).
 
 ### Reports
 All reports can be found in the `reports` folder. Bug reports are in [`docs/reports/bugs`](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/bugs).
