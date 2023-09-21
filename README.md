@@ -7,7 +7,7 @@ This is a Quality Assurance (QA) project for a [Restaurant Reviews](https://rest
 The project has 4 main components:
 
 1. Automated end-to-end tests using [Cypress](https://www.cypress.io) and Typescript
-2. Exploratory accessibility tests using [XRAY](https://www.getxray.app/exploratory-testing)
+2. Exploratory accessibility tests using [Xray](https://www.getxray.app/exploratory-testing)
 3. Manual tests for offline capability
 4. A comprehensive bug report for a key functionality that recently stopped working
 
