@@ -20,10 +20,10 @@ User stories are saved in pdf files exported from [JIRA](https://www.atlassian.c
 Test cases were created using JIRA and [Zephyr Scale](https://smartbear.com/test-management/zephyr-scale/). They have been exported to the `test-cases` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-tests.xlsx).
 
 ### Reports
-All reports can be found in the `reports` folder. Bug reports are in [`docs/reports/bugs`](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/bugs).
+All reports can be found in the `reports` folder. Bug reports are in the `docs/reports/bugs` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/bugs).
 
 ## Accessibility Testing
-Accessibility tests are performed using [XRAY](https://www.getxray.app/exploratory-testing). Reports and recordings will be made available shortly.
+Accessibility tests are performed using [Xray](https://www.getxray.app/exploratory-testing). Reports are available in the `docs/reports/exploratory-tests` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/exploratory-tests).
 
 ## Offline Capability Testing
 Manual offline capability testing verifies that a subset of features work seamlessly without an internet connection. Chrome dev tools are used to simulate offline mode.
