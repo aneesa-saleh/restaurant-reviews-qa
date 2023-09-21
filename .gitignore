@@ -1,5 +1,8 @@
 # source: https://github.com/cypress-io/cypress-example-todomvc/blob/master/.gitignore
 
+# OS files
+.DS_Store
+
 # Logs
 logs
 *.log
