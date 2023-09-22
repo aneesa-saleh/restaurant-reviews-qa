@@ -4,7 +4,19 @@
   "description": "QA Project for Restaurant Reviews Web App",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run cypress:run",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npm run prereport && npx cypress run",
+    "cypress:run:chrome": "npm run prereport && npx cypress run -b chrome",
+    "cypress:run:firefox": "npm run prereport && npx cypress run -b firefox",
+    "cypress:run:edge": "npm run prereport && npx cypress run -b edge",
+    "junit:merge": "npx junit-merge -d \"cypress/results/junit\" -o \"cypress/results/junit/results.xml\"",
+    "cypress:e2e": "npm run cypress:run; npm run junit:merge",
+    "cypress:e2e:chrome": "npm run cypress:run:chrome; npm run junit:merge",
+    "cypress:e2e:firefox": "npm run cypress:run:firefox; npm run junit:merge",
+    "cypress:e2e:edge": "npm run cypress:run:edge; npm run junit:merge",
+    "delete:reports": "rm -r cypress/results || true",
+    "prereport": "npm run delete:reports"
   },
   "keywords": [
     "qa"
