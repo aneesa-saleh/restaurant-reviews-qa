@@ -17,6 +17,7 @@ The project has 4 main components:
 User stories are saved in pdf files exported from [JIRA](https://www.atlassian.com/software/jira). There is a detailed list of user stories including acceptance criteria [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-details.pdf). Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-summary.pdf) for a summarised version of the list. See below for a mind map of features and functionalities.
 
 ![Features and functionalities mind map](https://raw.githubusercontent.com/aneesa-saleh/restaurant-reviews-qa/master/docs/user-stories/Features%20and%20functionalities%20mind%20map.jpg)
+
 <p align=center>Mind map of features and functionalities</p>
 
 ### Test cases (manual)
@@ -26,10 +27,10 @@ Test cases were created using JIRA and [Zephyr Scale](https://smartbear.com/test
 All reports can be found in the `reports` folder. Bug reports are in the `docs/reports/bugs` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/bugs).
 
 ## Accessibility Testing
-Accessibility tests are performed using [Xray](https://www.getxray.app/exploratory-testing). Reports are available in the `docs/reports/exploratory-tests` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/exploratory-tests).
+Accessibility tests are performed using [Xray](https://www.getxray.app/exploratory-testing). Reports are available in the `docs/reports/exploratory-tests` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/exploratory-tests). Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/accessibility-test-cases.xlsx) for test cases.
 
 ## Offline Capability Testing
-Manual offline capability testing verifies that a subset of features work seamlessly without an internet connection. Chrome dev tools are used to simulate offline mode.
+Manual offline capability testing verifies that a subset of features work seamlessly without an internet connection. Chrome dev tools are used to simulate offline mode. Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-test-cases.xlsx) for test cases.
 
 ## Running automated tests
 Follow these steps to set up and run cypress tests.
