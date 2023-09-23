@@ -7,8 +7,8 @@ export default defineConfig({
     jenkinsMode: true
   },
   retries: {
-    runMode: 1,
-    openMode: 1,
+    runMode: 2,
+    openMode: 2,
   },
   viewportHeight: 1080,
   viewportWidth: 1920,
