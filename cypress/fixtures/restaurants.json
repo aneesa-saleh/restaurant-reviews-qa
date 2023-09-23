@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Aneesa Chinese Food",
+    "neighborhood": "Manhattan",
+    "photograph_large": "1-800_large.jpg",
+    "photograph_large_wide": "1_wide-800_large.jpg",
+    "photograph_medium_1x": "1-600_medium_1x.jpg",
+    "photograph_medium_2x": "1-800_medium_2x.jpg",
+    "photograph_small_1x": "1_crop-400_small_1x.jpg",
+    "photograph_small_2x": "1_crop-800_small_2x.jpg",
+    "alt": "Customers eating at Aneesa Chinese Food restaurant",
+    "address": "171 E Broadway, New York, NY 10002",
+    "latlng": {
+      "lat": 40.713829,
+      "lng": -73.989667
+    },
+    "cuisine_type": "Asian",
+    "operating_hours": {
+      "Monday": "5:30 pm to 11:00 pm",
+      "Tuesday": "5:30 pm to 12:00 am",
+      "Wednesday": "5:30 pm to 12:00 am",
+      "Thursday": "5:30 pm to 12:00 am",
+      "Friday": "5:30 pm to 12:00 am",
+      "Saturday": "12:00 pm to 4:00 pm, 5:30 pm to 12:00 am",
+      "Sunday": "12:00 pm to 4:00 pm, 5:30 pm to 11:00 pm"
+    },
+    "createdAt": 1504095563444,
+    "updatedAt": "2023-09-20T22:49:13.940Z",
+    "is_favorite": "false",
+    "id": 1
+  },
+  {
+    "name": "Emily",
+    "neighborhood": "Brooklyn",
+    "photograph_large": "2-800_large.jpg",
+    "photograph_large_wide": "2_wide-800_large.jpg",
+    "photograph_medium_1x": "2-600_medium_1x.jpg",
+    "photograph_medium_2x": "2-800_medium_2x.jpg",
+    "photograph_small_1x": "2-400_small_1x.jpg",
+    "photograph_small_2x": "2-800_small_2x.jpg",
+    "alt": "A plate of pizza at Emily Restaurant",
+    "address": "919 Fulton St, Brooklyn, NY 11238",
+    "latlng": {
+      "lat": 40.683555,
+      "lng": -73.966393
+    },
+    "cuisine_type": "Pizza",
+    "operating_hours": {
+      "Monday": "5:30 pm to 11:00 pm",
+      "Tuesday": "5:30 pm to 11:00 pm",
+      "Wednesday": "5:30 pm to 11:00 pm",
+      "Thursday": "5:30 pm to 11:00 pm",
+      "Friday": "5:30 pm to 11:00 pm",
+      "Saturday": "5:00 pm to 11:30 pm",
+      "Sunday": "12:00 pm to 3:00 pm, 5:00 pm to 11:00 pm"
+    },
+    "createdAt": 1504095568414,
+    "updatedAt": "2021-06-30T21:20:24.030Z",
+    "is_favorite": "true",
+    "id": 2
+  },
+  {
+    "name": "Kang Ho Dong Baekjeong",
+    "neighborhood": "Manhattan",
+    "photograph_large": "3-800_large.jpg",
+    "photograph_large_wide": "3_wide-800_large.jpg",
+    "photograph_medium_1x": "3-600_medium_1x.jpg",
+    "photograph_medium_2x": "3-800_medium_2x.jpg",
+    "photograph_small_1x": "3-400_small_1x.jpg",
+    "photograph_small_2x": "3-800_small_2x.jpg",
+    "alt": "Interior of Kang Ho Dong Baekjeong restaurant",
+    "address": "1 E 32nd St, New York, NY 10016",
+    "latlng": {
+      "lat": 40.747143,
+      "lng": -73.985414
+    },
+    "cuisine_type": "Asian",
+    "operating_hours": {
+      "Monday": "11:30 am to 2:00 am",
+      "Tuesday": "11:30 am to 2:00 am",
+      "Wednesday": "11:30 am to 2:00 am",
+      "Thursday": "11:30 am to 2:00 am",
+      "Friday": "11:30 am to 6:00 am",
+      "Saturday": "11:30 am to 6:00 am",
+      "Sunday": "11:30 am to 2:00 am"
+    },
+    "createdAt": 1504095571434,
+    "updatedAt": "2023-09-22T13:55:53.850Z",
+    "is_favorite": "false",
+    "id": 3
+  },
+  {
+    "name": "Katz's Delicatessen",
+    "neighborhood": "Manhattan",
+    "photograph_large": "4-800_large.jpg",
+    "photograph_large_wide": "4_wide-800_large.jpg",
+    "photograph_medium_1x": "4-600_medium_1x.jpg",
+    "photograph_medium_2x": "4-800_medium_2x.jpg",
+    "photograph_small_1x": "4-400_small_1x.jpg",
+    "photograph_small_2x": "4-800_small_2x.jpg",
+    "alt": "Katz's Delicatessen building at night",
+    "address": "205 E Houston St, New York, NY 10002",
+    "latlng": {
+      "lat": 40.722216,
+      "lng": -73.987501
+    },
+    "cuisine_type": "American",
+    "operating_hours": {
+      "Monday": "8:00 am to 10:30 pm",
+      "Tuesday": "8:00 am to 10:30 pm",
+      "Wednesday": "8:00 am to 10:30 pm",
+      "Thursday": "8:00 am to 2:30 am",
+      "Friday": "8:00 am to Sat",
+      "Saturday": "Open 24 hours",
+      "Sunday": "Sat to 10:30 pm"
+    },
+    "createdAt": 1504095567091,
+    "updatedAt": 1504095567091,
+    "is_favorite": false,
+    "id": 4
+  },
+  {
+    "name": "Roberta's Pizza",
+    "neighborhood": "Brooklyn",
+    "photograph_large": "5-800_large.jpg",
+    "photograph_large_wide": "5_wide-800_large.jpg",
+    "photograph_medium_1x": "5-600_medium_1x.jpg",
+    "photograph_medium_2x": "5-800_medium_2x.jpg",
+    "photograph_small_1x": "5_crop-400_small_1x.jpg",
+    "photograph_small_2x": "5_crop-800_small_2x.jpg",
+    "alt": "Customers eating at Robert's Pizza restaurant",
+    "address": "261 Moore St, Brooklyn, NY 11206",
+    "latlng": {
+      "lat": 40.705089,
+      "lng": -73.933585
+    },
+    "cuisine_type": "Pizza",
+    "operating_hours": {
+      "Monday": "11:00 am to 12:00 am",
+      "Tuesday": "11:00 am to 12:00 am",
+      "Wednesday": "11:00 am to 12:00 am",
+      "Thursday": "11:00 am to 12:00 am",
+      "Friday": "11:00 am to 12:00 am",
+      "Saturday": "10:00 am to 12:00 am",
+      "Sunday": "10:00 am to 12:00 am"
+    },
+    "createdAt": 1504095567071,
+    "updatedAt": "2018-11-17T21:57:22.285Z",
+    "is_favorite": "true",
+    "id": 5
+  },
+  {
+    "name": "Hometown BBQ",
+    "neighborhood": "Brooklyn",
+    "photograph_large": "6-800_large.jpg",
+    "photograph_large_wide": "6_wide-800_large.jpg",
+    "photograph_medium_1x": "6-600_medium_1x.jpg",
+    "photograph_medium_2x": "6-800_medium_2x.jpg",
+    "photograph_small_1x": "6_crop-400_small_1x.jpg",
+    "photograph_small_2x": "6_crop-800_small_2x.jpg",
+    "alt": "Customers eating at Hometown BBQ restaurant",
+    "address": "454 Van Brunt St, Brooklyn, NY 11231",
+    "latlng": {
+      "lat": 40.674925,
+      "lng": -74.016162
+    },
+    "cuisine_type": "American",
+    "operating_hours": {
+      "Monday": "Closed",
+      "Tuesday": "12:00 pm to 10:00 pm",
+      "Wednesday": "12:00 pm to 10:00 pm",
+      "Thursday": "12:00 pm to 10:00 pm",
+      "Friday": "12:00 pm to 11:00 pm",
+      "Saturday": "12:00 pm to 11:00 pm",
+      "Sunday": "12:00 pm to 9:00 pm"
+    },
+    "createdAt": 1504095567071,
+    "updatedAt": 1504095567071,
+    "is_favorite": false,
+    "id": 6
+  },
+  {
+    "name": "Superiority Burger",
+    "neighborhood": "Manhattan",
+    "photograph_large": "7-800_large.jpg",
+    "photograph_large_wide": "7_wide-800_large.jpg",
+    "photograph_medium_1x": "7-600_medium_1x.jpg",
+    "photograph_medium_2x": "7-800_medium_2x.jpg",
+    "photograph_small_1x": "7-400_small_1x.jpg",
+    "photograph_small_2x": "7-800_small_2x.jpg",
+    "alt": "Entrance of Superiority Burger restaurant",
+    "address": "430 E 9th St, New York, NY 10009",
+    "latlng": {
+      "lat": 40.727397,
+      "lng": -73.983645
+    },
+    "cuisine_type": "American",
+    "operating_hours": {
+      "Monday": "11:30 am to 10:00 pm",
+      "Tuesday": "Closed",
+      "Wednesday": "11:30 am to 10:00 pm",
+      "Thursday": "11:30 am to 10:00 pm",
+      "Friday": "11:30 am to 10:00 pm",
+      "Saturday": "11:30 am to 10:00 pm",
+      "Sunday": "11:30 am to 10:00 pm"
+    },
+    "createdAt": 1504095567091,
+    "updatedAt": 1504095567091,
+    "is_favorite": false,
+    "id": 7
+  },
+  {
+    "name": "The Dutch",
+    "neighborhood": "Manhattan",
+    "photograph_large": "8-800_large.jpg",
+    "photograph_large_wide": "8_wide-800_large.jpg",
+    "photograph_medium_1x": "8-600_medium_1x.jpg",
+    "photograph_medium_2x": "8-800_medium_2x.jpg",
+    "photograph_small_1x": "8-400_small_1x.jpg",
+    "photograph_small_2x": "8-800_small_2x.jpg",
+    "alt": "Signage of The Dutch restaurant",
+    "address": "131 Sullivan St, New York, NY 10012",
+    "latlng": {
+      "lat": 40.726584,
+      "lng": -74.002082
+    },
+    "cuisine_type": "American",
+    "operating_hours": {
+      "Monday": "11:30 am to 3:00 pm, 5:30 pm to 11:00 pm",
+      "Tuesday": "11:30 am to 3:00 pm, 5:30 pm to 11:00 pm",
+      "Wednesday": "11:30 am to 3:00 pm, 5:30 pm to 11:00 pm",
+      "Thursday": "11:30 am to 3:00 pm, 5:30 pm to 11:00 pm",
+      "Friday": "11:30 am to 3:00 pm, 5:30 pm to 11:30 pm",
+      "Saturday": "10:00 am to 3:00 pm, 5:30 pm to 11:30 pm",
+      "Sunday": "10:00 am to 3:00 pm, 5:30 pm to 11:00 pm"
+    },
+    "createdAt": 1504095567091,
+    "updatedAt": 1504095567091,
+    "is_favorite": false,
+    "id": 8
+  },
+  {
+    "name": "Mu Ramen",
+    "neighborhood": "Queens",
+    "photograph_large": "9-800_large.jpg",
+    "photograph_large_wide": "9_wide-800_large.jpg",
+    "photograph_medium_1x": "9-600_medium_1x.jpg",
+    "photograph_medium_2x": "9-800_medium_2x.jpg",
+    "photograph_small_1x": "9-400_small_1x.jpg",
+    "photograph_small_2x": "9-800_small_2x.jpg",
+    "alt": "Customers eating at Mu Ramen restaurant",
+    "address": "1209 Jackson Ave, Queens, NY 11101",
+    "latlng": {
+      "lat": 40.743797,
+      "lng": -73.950652
+    },
+    "cuisine_type": "Asian",
+    "operating_hours": {
+      "Monday": "5:00 pm to 10:00 pm",
+      "Tuesday": "5:00 pm to 10:00 pm",
+      "Wednesday": "5:00 pm to 10:00 pm",
+      "Thursday": "5:00 pm to 10:00 pm",
+      "Friday": "5:00 pm to 11:00 pm",
+      "Saturday": "5:00 pm to 11:00 pm",
+      "Sunday": "5:00 pm to 10:00 pm"
+    },
+    "createdAt": 1504095567191,
+    "updatedAt": 1504095567191,
+    "is_favorite": false,
+    "id": 9
+  },
+  {
+    "name": "Casa Enrique",
+    "neighborhood": "Queens",
+    "photograph_large": "10-800_large.jpg",
+    "photograph_large_wide": "10_wide-800_large.jpg",
+    "photograph_medium_1x": "10-600_medium_1x.jpg",
+    "photograph_medium_2x": "10-800_medium_2x.jpg",
+    "photograph_small_1x": "10_crop-400_small_1x.jpg",
+    "photograph_small_2x": "10_crop-800_small_2x.jpg",
+    "alt": "Interior of Casa Enrique restaurant",
+    "address": "5-48 49th Ave, Queens, NY 11101",
+    "latlng": {
+      "lat": 40.743394,
+      "lng": -73.954235
+    },
+    "cuisine_type": "Mexican",
+    "operating_hours": {
+      "Monday": "5:00 pm to 12:00 am",
+      "Tuesday": "5:00 pm to 12:00 am",
+      "Wednesday": "5:00 pm to 12:00 am",
+      "Thursday": "5:00 pm to 12:00 am",
+      "Friday": "5:00 pm to 12:00 am",
+      "Saturday": "11:00 am to 12:00 am",
+      "Sunday": "11:00 am to 12:00 am"
+    },
+    "createdAt": 1504095567183,
+    "updatedAt": "2018-12-13T10:25:50.949Z",
+    "is_favorite": "true",
+    "id": 10
+  }
+]
