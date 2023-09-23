@@ -1,43 +1,35 @@
-import { Interception } from "cypress/types/net-stubbing"
-
-import { Restaurant } from "../models/restaurant"
+import { HomePage, RestaurantNamesAndCount } from "../support/pages/home-page"
 
 describe('Home page', () => {
 
+    let homePage: HomePage
+
     beforeEach(() => {
-        cy.intercept('/restaurants').as('restaurantsJson')
-        cy.visit('/')
+        homePage = new HomePage()
+        homePage.visit()
     })
 
     describe('restaurants map', () => {
         it('renders a map', () => {
-            cy.getById('map')
-                .should('be.visible')
-                .and('contain.text', 'Leaflet')
-                .and('contain.text', 'Mapbox')
+                homePage.getMap()
+                    .should('be.visible')
+                    .and('contain.text', 'Leaflet')
+                    .and('contain.text', 'Mapbox')
         })
 
         it('renders map location pins correctly', () => {
-            cy.wait('@restaurantsJson').then((interception: Interception) => {
-                const restaurantsFromAPI: Array<Restaurant> = interception.response?.body;
+            homePage.getRestaurantNamesAndCountFromAPICall()
+                .then(({restaurantsCountFromAPI, restaurantNamesFromAPI } : RestaurantNamesAndCount) => {
+                    homePage.getMapPins()
+                        .should('have.length', restaurantsCountFromAPI)
+                        
+                        .each((mapPin: JQuery<HTMLElement>) => {
+                            const mapPinTitle: string = mapPin.attr('title') || ''
 
-                const restaurantNamesFromAPI = new Set<string>()
-
-                restaurantsFromAPI.forEach((restaurant: Restaurant) => {
-                    restaurantNamesFromAPI.add(restaurant.name)
+                            expect(mapPinTitle).not.to.be.empty
+                            expect(restaurantNamesFromAPI).to.contain(mapPinTitle)
+                        })
                 })
-
-                const restaurantsCountFromAPI = restaurantsFromAPI.length
-                cy.get('img.leaflet-marker-icon').as('mapPins')
-                    .should('have.length', restaurantsCountFromAPI)
-    
-                cy.get('@mapPins').each((mapPin: JQuery<HTMLElement>) => {
-                    const mapPinTitle = mapPin.attr('title') || ''
-                    
-                    expect(mapPinTitle).not.to.be.empty
-                    expect(restaurantNamesFromAPI.has(mapPinTitle)).to.be.true
-                })
-            })
         })
 
         it('links to restaurant details page when a pin is clicked')
