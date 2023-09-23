@@ -16,7 +16,10 @@
     "cypress:e2e:firefox": "npm run cypress:run:firefox; npm run junit:merge",
     "cypress:e2e:edge": "npm run cypress:run:edge; npm run junit:merge",
     "delete:reports": "rm -r cypress/results || true",
-    "prereport": "npm run delete:reports"
+    "prereport": "npm run delete:reports",
+    "serve": "serve -l 4200 app",
+    "serve-and-test": "start-server-and-test serve http://localhost:4200 test",
+    "serve-and-open-cypress": "start-server-and-test serve http://localhost:4200 cypress:open"
   },
   "keywords": [
     "qa"
@@ -27,6 +30,8 @@
     "cypress": "^13.2.0"
   },
   "devDependencies": {
+    "serve": "^14.2.1",
+    "start-server-and-test": "^2.0.1",
     "typescript": "^5.2.2"
   }
 }
