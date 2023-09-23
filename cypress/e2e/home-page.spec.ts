@@ -46,4 +46,17 @@ describe('Home page', () => {
                 })
         })
     })
+
+    describe('list of restaurants', () => {
+        it('shows the correct number of restaurants', () => {
+            homePage.getRestaurantsCountFromAPICall()
+                .then(({ restaurantsCountFromAPI }) => {
+                    homePage.getRestaurantArticles()
+                        .should('have.length', restaurantsCountFromAPI)
+                })
+        })
+
+        it('shows a summary of each restaurant')
+        it('links to restaurant details page when view details link is clicked')
+    })
 })
