@@ -1,9 +1,12 @@
 import { Restaurant } from "../../models/restaurant";
 
 export class HomePage {
-    visit() {
-        cy.intercept('/restaurants').as('restaurantsAPIRequest')
+    constructor() {
+        this.visit()
+    }
 
+    private visit() {
+        cy.intercept('/restaurants').as('restaurantsAPIRequest')
         cy.visit('/')
     }
 
@@ -19,6 +22,40 @@ export class HomePage {
 
     getRestaurantArticles(): Cypress.Chainable<JQuery<HTMLElement>> {
         return cy.get('#restaurants-list article')
+    }
+
+    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>, restaurantsByName: Map<string, Restaurant>):
+        Cypress.Chainable<RestaurantArticle | null> {
+            
+            const restaurantName = article.find('h2').text()
+            const restaurant: Restaurant = restaurantsByName.get(restaurantName)
+        
+            const { alt, neighborhood, address } = restaurant;
+
+            const imageElement = cy.wrap(article.find(`img[data-alt="${alt}"]`))
+            
+            const neighborhoodElement = cy.wrap(article)
+                .find('p')
+                .contains((new RegExp(`^${neighborhood}$`, 'g')))
+
+            const addressElement = cy.wrap(article)
+                .find('p')
+                .contains((new RegExp(`^${address}$`, 'g')))
+
+            const viewDetailsElement = cy.wrap(article)
+                .find('a')
+                .contains('View Details')
+
+            const nameElement = cy.wrap(article.find('h2'))
+
+
+            return cy.wrap({
+                name: nameElement,
+                image: imageElement,
+                neighborhood: neighborhoodElement,
+                address: addressElement,
+                viewDetailsLink: viewDetailsElement
+            })
     }
 
     /* actions */
@@ -84,6 +121,19 @@ export class HomePage {
             return { restaurantsCountFromAPI, restaurantNamesFromAPI }
         })
     }
+
+    getRestaurantsMappedByName(): Cypress.Chainable<Map<string, Restaurant>> {
+
+        return this.getRestaurantsFromAPICall().then((restaurantsFromAPI) => {
+            const restaurantsMap = new Map<string, Restaurant>()
+
+            restaurantsFromAPI.forEach((restaurant: Restaurant) => {
+                restaurantsMap.set(restaurant.name, restaurant)
+            })
+
+            return restaurantsMap
+        })
+    }
 }
 
 export interface RestaurantNamesAndCount {
@@ -97,4 +147,12 @@ export type RestaurantsCount = Pick<RestaurantNamesAndCount, 'restaurantsCountFr
 
 export interface MapPin {
     restaurantName: string;
+}
+
+export interface RestaurantArticle {
+    name: Cypress.Chainable<JQuery<HTMLElement>>;
+    image: Cypress.Chainable<JQuery<HTMLElement>>;
+    neighborhood: Cypress.Chainable<JQuery<HTMLParagraphElement>>;
+    address: Cypress.Chainable<JQuery<HTMLParagraphElement>>;
+    viewDetailsLink: Cypress.Chainable<JQuery<HTMLAnchorElement>>;
 }

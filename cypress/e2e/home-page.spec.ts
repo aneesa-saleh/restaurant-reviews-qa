@@ -1,5 +1,6 @@
+import { Restaurant } from "../models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
-import { HomePage, RestaurantNamesAndCount } from "../support/pages/home-page"
+import { HomePage, RestaurantArticle, RestaurantNamesAndCount } from "../support/pages/home-page"
 
 describe('Home page', () => {
 
@@ -7,7 +8,6 @@ describe('Home page', () => {
 
     beforeEach(() => {
         homePage = new HomePage()
-        homePage.visit()
     })
 
     describe('restaurants map', () => {
@@ -56,7 +56,24 @@ describe('Home page', () => {
                 })
         })
 
-        it('shows a summary of each restaurant')
+        it('shows a complete summary of each restaurant', () => {
+            homePage.getRestaurantsMappedByName()
+                .then((restaurantsByName) => {
+                    homePage.getRestaurantArticles().each(
+                        (article) => homePage.getElementsOfRestaurantArticle(article, restaurantsByName)
+                        .then(({ name, image, neighborhood, address, viewDetailsLink }: RestaurantArticle) => {
+
+                            name.should('have.length', 1)
+                            image.should('have.length', 1)
+                            neighborhood.should('have.length', 1)
+                            address.should('have.length', 1)
+                            viewDetailsLink.should('have.length', 1)
+
+                        })
+                    )
+                })
+        })
+
         it('links to restaurant details page when view details link is clicked')
     })
 })
