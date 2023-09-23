@@ -36,19 +36,10 @@ describe('Home page', () => {
         it('links to restaurant details page when a pin is clicked', () => {
             const detailsPage: DetailsPage = new DetailsPage()
 
-            homePage.getMapPins()
-                .should('have.length.greaterThan', 0)
-                .first()
-                .then((mapPin) => {
-                    const restaurantName = mapPin.attr('title')
-
-                    // need this since we plan on going to a new page
-                    cy.unregisterAllServiceWorkers()
-
-                    cy.wrap(mapPin).click()
-
+            homePage.clickFirstMapPin()
+                .then(({ restaurantName }) => {
                     cy.location('pathname')
-                        .should('equal', '/restaurant.html')
+                        .should('equal', detailsPage.getLocationPathname())
 
                     detailsPage.getRestaurantName()
                         .should('have.text', restaurantName)
