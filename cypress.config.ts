@@ -7,8 +7,8 @@ export default defineConfig({
     jenkinsMode: true
   },
   retries: {
-    runMode: 2,
-    openMode: 0,
+    runMode: 1,
+    openMode: 1,
   },
   viewportHeight: 1080,
   viewportWidth: 1920,
@@ -22,4 +22,4 @@ export default defineConfig({
     apiUrl: 'https://api-restaurant-reviews.glitch.me/',
   },
   pageLoadTimeout: 20000,
-});
+})
