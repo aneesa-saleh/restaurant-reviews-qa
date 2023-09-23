@@ -21,4 +21,5 @@ export default defineConfig({
   env: {
     apiUrl: 'https://api-restaurant-reviews.glitch.me/',
   },
+  pageLoadTimeout: 20000,
 });
