@@ -120,7 +120,22 @@ describe('Home page', () => {
             homePage.filterRestaurantsByNeighborhoodAndCuisine(Neighborhoods.Queens, Cuisines.Mexican)
                 .then(verifyFilteredRestaurants)
         })
-        it('shows complete list of restaurants when filters are cleared')
+
+        it('shows complete list of restaurants when filters are reset', () => {
+            homePage.filterRestaurantsByNeighborhoodAndCuisine(Neighborhoods.Manhattan, Cuisines.American)
+                .then(() => {
+                    homePage.resetFilters()
+
+                    homePage.getRestaurantsFromAPICall()
+                        .then((unfilteredRestaurants: Array<Restaurant>) => {
+
+                            homePage.getRestaurantArticles()
+                                .should('have.length', unfilteredRestaurants.length)
+
+                        })
+                    
+                })
+        })
 
         function verifyFilteredRestaurants(filteredRestaurants: Set<string>) {
             homePage.getRestaurantArticles()

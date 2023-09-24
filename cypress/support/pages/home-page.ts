@@ -102,6 +102,11 @@ export class HomePage {
         cy.getById('cuisines-select').select(cuisine)
     }
 
+    resetFilters() {
+        this.selectNeighborhood(Neighborhoods.AllNeighborhoods)
+        this.selectCuisine(Cuisines.AllCuisines)
+    }
+
     filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
         this.selectNeighborhood(neighborhood)
         
@@ -237,6 +242,7 @@ export enum Neighborhoods {
     Manhattan = 'Manhattan',
     Brooklyn = 'Brooklyn',
     Queens = 'Queens',
+    AllNeighborhoods = 'All Neighborhoods',
 }
 
 export enum Cuisines {
@@ -244,4 +250,5 @@ export enum Cuisines {
     Pizza = 'Pizza',
     American = 'American',
     Mexican = 'Mexican',
+    AllCuisines = 'All Cuisines',
 }
