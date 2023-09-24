@@ -1,6 +1,6 @@
 import { Restaurant } from "../models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
-import { HomePage, Neighborhoods, RestaurantArticle, RestaurantNamesAndCount } from "../support/pages/home-page"
+import { Cuisines, HomePage, Neighborhoods, RestaurantArticle, RestaurantNamesAndCount } from "../support/pages/home-page"
 
 describe('Home page', () => {
 
@@ -56,7 +56,7 @@ describe('Home page', () => {
                 })
         })
 
-        it.only('shows a complete summary of each restaurant', () => {
+        it('shows a complete summary of each restaurant', () => {
             homePage.getRestaurantsMappedByName()
                 .then((restaurantsByName) => {
                     homePage.getRestaurantArticles().each(
@@ -124,7 +124,24 @@ describe('Home page', () => {
                 })
         })
 
-        it('filters restaurant by cuisine')
+        it('filters restaurant by cuisine', () => {
+            homePage.filterRestaurantsByCuisine(Cuisines.Pizza)
+                .then((filteredRestaurants: Set<string>) => {
+
+                    homePage.getRestaurantArticles()
+                        .should('have.length', filteredRestaurants.size)
+                        .each((restaurantArticle) => {
+
+                            homePage.getNameElementOfRestaurantArticle(restaurantArticle)
+                                .invoke('text')
+                                .should((restaurantName) => {
+                                    expect(filteredRestaurants).to.contain(restaurantName)
+                                })
+
+                        })
+                })
+        })
+
         it('filters restaurant by neighborhood and cuisine')
         it('shows complete list of restaurants when filters are cleared')
     })

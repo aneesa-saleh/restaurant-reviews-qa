@@ -108,6 +108,20 @@ export class HomePage {
         })
     }
 
+    filterRestaurantsByCuisine(cuisine: Cuisines): Cypress.Chainable<Set<string>> {
+        cy.getById('cuisines-select').select(cuisine)
+
+        return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
+            const filteredRestaurants = new Set<string>
+            restaurants.filter(restaurant => restaurant.cuisine_type === cuisine)
+                .forEach((restaurant: Restaurant) => {
+                    filteredRestaurants.add(restaurant.name)
+                })
+                
+            return cy.wrap(filteredRestaurants)
+        })
+    }
+
     /* API */
 
     getRestaurantsFromAPICall(): Cypress.Chainable<Array<Restaurant>> {
