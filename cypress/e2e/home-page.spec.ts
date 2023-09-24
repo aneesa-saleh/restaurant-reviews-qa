@@ -74,6 +74,17 @@ describe('Home page', () => {
                 })
         })
 
-        it('links to restaurant details page when view details link is clicked')
+        it('links to restaurant details page when view details link is clicked', () => {
+            const detailsPage: DetailsPage = new DetailsPage()
+
+            homePage.clickFirstViewDetailsLink()
+                .then(({ restaurantName }) => {
+                    cy.location('pathname')
+                        .should('equal', detailsPage.getLocationPathname())
+
+                    detailsPage.getRestaurantName()
+                        .should('have.text', restaurantName)
+                })
+        })
     })
 })
