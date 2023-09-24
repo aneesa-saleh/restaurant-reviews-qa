@@ -24,43 +24,38 @@ export class HomePage {
         return cy.get('#restaurants-list article')
     }
 
-    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>, restaurantsByName: Map<string, Restaurant>):
+    getNameElementOfRestaurantArticle(article: JQuery<HTMLElement>):
+        Cypress.Chainable<JQuery<HTMLHeadingElement>> {
+            
+            return cy.wrap(article).find('h2')
+    }
+
+    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>):
         Cypress.Chainable<RestaurantArticle> {
             
-            const restaurantName = article.find('h2').text()
-            expect(restaurantName).not.to.be.null
-
-            const restaurant: Restaurant = restaurantsByName.get(restaurantName)
-            expect(restaurant).not.to.be.null
-        
-            const { alt, neighborhood, address } = restaurant;
-
-            const imageElement = cy.wrap(article.find(`img[data-alt="${alt}"]`))
-            
+            const nameElement = cy.wrap(article).find('h2')
+            const imageElement = cy.wrap(article).find('img')
             const neighborhoodElement = cy.wrap(article)
                 .find('p')
-                .contains((new RegExp(`^${neighborhood}$`, 'g')))
+                .first()
 
             const addressElement = cy.wrap(article)
                 .find('p')
-                .contains((new RegExp(`^${address}$`, 'g')))
+                .eq(1)
 
-            const viewDetailsElement = cy.wrap(article)
+            const viewDetailsLinkElement = cy.wrap(article)
                 .find('a')
-                .contains('View Details')
-
-            const nameElement = cy.wrap(article.find('h2'))
 
             return cy.wrap({
-                name: nameElement,
-                image: imageElement,
-                neighborhood: neighborhoodElement,
-                address: addressElement,
-                viewDetailsLink: viewDetailsElement
+                nameElement,
+                imageElement,
+                neighborhoodElement,
+                addressElement,
+                viewDetailsLinkElement
             })
     }
 
-    /* actions */
+    /* UI actions */
 
     clickFirstMapPin(): Cypress.Chainable<MapPin> {
         // need this since we plan on going to a new page
@@ -97,6 +92,20 @@ export class HomePage {
 
                 return cy.wrap({ restaurantName })
             })
+    }
+
+    filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
+        cy.getById('neighborhoods-select').select(neighborhood)
+
+        return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
+            const filteredRestaurants = new Set<string>
+            restaurants.filter(restaurant => restaurant.neighborhood === neighborhood)
+                .forEach((restaurant: Restaurant) => {
+                    filteredRestaurants.add(restaurant.name)
+                })
+                
+            return cy.wrap(filteredRestaurants)
+        })
     }
 
     /* API */
@@ -144,14 +153,20 @@ export class HomePage {
         })
     }
 
+    mapRestaurantsByName(restaurants: Array<Restaurant>) {
+        const restaurantsMap = new Map<string, Restaurant>()
+
+        restaurants.forEach((restaurant: Restaurant) => {
+            restaurantsMap.set(restaurant.name, restaurant)
+        })
+
+        return restaurantsMap
+    }
+
     getRestaurantsMappedByName(): Cypress.Chainable<Map<string, Restaurant>> {
 
         return this.getRestaurantsFromAPICall().then((restaurantsFromAPI) => {
-            const restaurantsMap = new Map<string, Restaurant>()
-
-            restaurantsFromAPI.forEach((restaurant: Restaurant) => {
-                restaurantsMap.set(restaurant.name, restaurant)
-            })
+            const restaurantsMap = this.mapRestaurantsByName(restaurantsFromAPI)
 
             return cy.wrap(restaurantsMap)
         })
@@ -172,9 +187,22 @@ export interface MapPin {
 }
 
 export interface RestaurantArticle {
-    name: Cypress.Chainable<JQuery<HTMLElement>>;
-    image: Cypress.Chainable<JQuery<HTMLElement>>;
-    neighborhood: Cypress.Chainable<JQuery<HTMLParagraphElement>>;
-    address: Cypress.Chainable<JQuery<HTMLParagraphElement>>;
-    viewDetailsLink: Cypress.Chainable<JQuery<HTMLAnchorElement>>;
+    nameElement: Cypress.Chainable<JQuery<HTMLHeadingElement>>;
+    imageElement: Cypress.Chainable<JQuery<HTMLImageElement>>;
+    neighborhoodElement: Cypress.Chainable<JQuery<HTMLParagraphElement>>;
+    addressElement: Cypress.Chainable<JQuery<HTMLElement>>;
+    viewDetailsLinkElement: Cypress.Chainable<JQuery<HTMLAnchorElement>>;
+}
+
+export enum Neighborhoods {
+    Manhattan = 'Manhattan',
+    Brooklyn = 'Brooklyn',
+    Queens = 'Queens',
+}
+
+export enum Cuisines {
+    Asian = 'Asian',
+    Pizza = 'Pizza',
+    American = 'American',
+    Mexican = 'Mexican',
 }

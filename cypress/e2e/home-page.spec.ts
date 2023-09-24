@@ -1,6 +1,6 @@
 import { Restaurant } from "../models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
-import { HomePage, RestaurantArticle, RestaurantNamesAndCount } from "../support/pages/home-page"
+import { HomePage, Neighborhoods, RestaurantArticle, RestaurantNamesAndCount } from "../support/pages/home-page"
 
 describe('Home page', () => {
 
@@ -56,18 +56,35 @@ describe('Home page', () => {
                 })
         })
 
-        it('shows a complete summary of each restaurant', () => {
+        it.only('shows a complete summary of each restaurant', () => {
             homePage.getRestaurantsMappedByName()
                 .then((restaurantsByName) => {
                     homePage.getRestaurantArticles().each(
-                        (article) => homePage.getElementsOfRestaurantArticle(article, restaurantsByName)
-                        .then(({ name, image, neighborhood, address, viewDetailsLink }: RestaurantArticle) => {
+                        (article) => homePage.getElementsOfRestaurantArticle(article)
+                        .then(({
+                            nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
+                        }: RestaurantArticle) => {
+                               nameElement.should('have.length', 1)
 
-                            name.should('have.length', 1)
-                            image.should('have.length', 1)
-                            neighborhood.should('have.length', 1)
-                            address.should('have.length', 1)
-                            viewDetailsLink.should('have.length', 1)
+                               nameElement.invoke('text').then((restaurantName: string) => {
+                                    const restaurant = restaurantsByName.get(restaurantName)
+
+                                    expect(restaurant).not.to.be.undefined
+                                    expect(restaurant).not.to.be.null
+
+                                    neighborhoodElement.should('have.length', 1)
+                                        .and('have.text', restaurant.neighborhood)
+
+                                    addressElement.should('have.length', 1)
+                                        .and('have.text', restaurant.address)
+
+                                    viewDetailsLinkElement.should('have.length', 1)
+                                        .and('have.text', 'View Details')
+
+                                    imageElement.should('have.length', 1)
+                                        .invoke('attr', 'data-alt')
+                                        .should('equal', restaurant.alt)
+                               })
 
                         })
                     )
@@ -86,5 +103,29 @@ describe('Home page', () => {
                         .should('have.text', restaurantName)
                 })
         })
+    })
+
+    describe('restaurant filters', () => {
+        it('filters restaurant by neighborhood', () => {
+            homePage.filterRestaurantsByNeighborhood(Neighborhoods.Brooklyn)
+                .then((filteredRestaurants: Set<string>) => {
+
+                    homePage.getRestaurantArticles()
+                        .should('have.length', filteredRestaurants.size)
+                        .each((restaurantArticle) => {
+
+                            homePage.getNameElementOfRestaurantArticle(restaurantArticle)
+                                .invoke('text')
+                                .should((restaurantName) => {
+                                    expect(filteredRestaurants).to.contain(restaurantName)
+                                })
+
+                        })
+                })
+        })
+
+        it('filters restaurant by cuisine')
+        it('filters restaurant by neighborhood and cuisine')
+        it('shows complete list of restaurants when filters are cleared')
     })
 })
