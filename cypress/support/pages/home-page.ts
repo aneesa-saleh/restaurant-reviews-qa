@@ -94,9 +94,17 @@ export class HomePage {
             })
     }
 
-    filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
+    selectNeighborhood(neighborhood: Neighborhoods) {
         cy.getById('neighborhoods-select').select(neighborhood)
+    }
 
+    selectCuisine(cuisine: Cuisines) {
+        cy.getById('cuisines-select').select(cuisine)
+    }
+
+    filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
+        this.selectNeighborhood(neighborhood)
+        
         return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>
             restaurants.filter(restaurant => restaurant.neighborhood === neighborhood)
@@ -109,11 +117,28 @@ export class HomePage {
     }
 
     filterRestaurantsByCuisine(cuisine: Cuisines): Cypress.Chainable<Set<string>> {
-        cy.getById('cuisines-select').select(cuisine)
+        this.selectCuisine(cuisine)
 
         return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>
             restaurants.filter(restaurant => restaurant.cuisine_type === cuisine)
+                .forEach((restaurant: Restaurant) => {
+                    filteredRestaurants.add(restaurant.name)
+                })
+                
+            return cy.wrap(filteredRestaurants)
+        })
+    }
+
+    filterRestaurantsByNeighborhoodAndCuisine(neighborhood: Neighborhoods, cuisine: Cuisines): Cypress.Chainable<Set<string>> {
+        this.selectNeighborhood(neighborhood)
+        this.selectCuisine(cuisine)
+
+        return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
+            const filteredRestaurants = new Set<string>
+            restaurants.filter(
+                    restaurant => restaurant.cuisine_type === cuisine && restaurant.neighborhood === neighborhood
+                )
                 .forEach((restaurant: Restaurant) => {
                     filteredRestaurants.add(restaurant.name)
                 })

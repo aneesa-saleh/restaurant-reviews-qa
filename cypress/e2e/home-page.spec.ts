@@ -108,41 +108,32 @@ describe('Home page', () => {
     describe('restaurant filters', () => {
         it('filters restaurant by neighborhood', () => {
             homePage.filterRestaurantsByNeighborhood(Neighborhoods.Brooklyn)
-                .then((filteredRestaurants: Set<string>) => {
-
-                    homePage.getRestaurantArticles()
-                        .should('have.length', filteredRestaurants.size)
-                        .each((restaurantArticle) => {
-
-                            homePage.getNameElementOfRestaurantArticle(restaurantArticle)
-                                .invoke('text')
-                                .should((restaurantName) => {
-                                    expect(filteredRestaurants).to.contain(restaurantName)
-                                })
-
-                        })
-                })
+                .then(verifyFilteredRestaurants)
         })
 
         it('filters restaurant by cuisine', () => {
             homePage.filterRestaurantsByCuisine(Cuisines.Pizza)
-                .then((filteredRestaurants: Set<string>) => {
-
-                    homePage.getRestaurantArticles()
-                        .should('have.length', filteredRestaurants.size)
-                        .each((restaurantArticle) => {
-
-                            homePage.getNameElementOfRestaurantArticle(restaurantArticle)
-                                .invoke('text')
-                                .should((restaurantName) => {
-                                    expect(filteredRestaurants).to.contain(restaurantName)
-                                })
-
-                        })
-                })
+                .then(verifyFilteredRestaurants)
         })
 
-        it('filters restaurant by neighborhood and cuisine')
+        it('filters restaurant by neighborhood and cuisine', () => {
+            homePage.filterRestaurantsByNeighborhoodAndCuisine(Neighborhoods.Queens, Cuisines.Mexican)
+                .then(verifyFilteredRestaurants)
+        })
         it('shows complete list of restaurants when filters are cleared')
+
+        function verifyFilteredRestaurants(filteredRestaurants: Set<string>) {
+            homePage.getRestaurantArticles()
+                .should('have.length', filteredRestaurants.size)
+                .each((restaurantArticle) => {
+
+                    homePage.getNameElementOfRestaurantArticle(restaurantArticle)
+                        .invoke('text')
+                        .should((restaurantName) => {
+                            expect(filteredRestaurants).to.contain(restaurantName)
+                        })
+
+                })
+        }
     })
 })
