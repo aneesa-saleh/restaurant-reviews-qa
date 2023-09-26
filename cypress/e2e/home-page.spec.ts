@@ -80,7 +80,7 @@ describe('Home page', () => {
 
                         expect(imageElement).to.have.lengthOf(1)
                         expect(imageElement.attr('data-alt'))
-                            .to.have.equal(restaurant.alt)
+                            .to.equal(restaurant.alt)
 
                     })
             })
