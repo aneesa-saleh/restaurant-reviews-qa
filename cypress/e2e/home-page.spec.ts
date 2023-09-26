@@ -1,6 +1,8 @@
-import { Restaurant } from "../models/restaurant"
+import { Restaurant } from "../support/models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
-import { Cuisines, HomePage, Neighborhoods, ElementsOfRestaurant, RestaurantNamesAndCount, MapPin } from "../support/pages/home-page"
+import { HomePage, MapPin } from "../support/pages/home-page"
+import { Cuisines, Neighborhoods } from "../support/common/constants"
+import { RestaurantNamesAndCount } from "../support/API"
 
 describe('Home page', () => {
 
@@ -19,7 +21,7 @@ describe('Home page', () => {
         })
 
         it('renders map location pins correctly', () => {
-            homePage.getRestaurantNamesAndCountFromAPICall()
+            homePage.getRestaurantNamesAndCountFromAPI()
                 .then(({restaurantsCountFromAPI, restaurantNamesFromAPI } : RestaurantNamesAndCount) => {
                     homePage.getMapPins()
                         .should('have.length', restaurantsCountFromAPI)
@@ -49,7 +51,7 @@ describe('Home page', () => {
 
     describe('list of restaurants', () => {
         it('shows the correct number of restaurants', () => {
-            homePage.getRestaurantsCountFromAPICall()
+            homePage.getRestaurantsCountFromAPI()
                 .then(({ restaurantsCountFromAPI }) => {
                     homePage.getRestaurants()
                         .should('have.length', restaurantsCountFromAPI)
@@ -126,7 +128,7 @@ describe('Home page', () => {
                 .then(() => {
                     homePage.resetFilters()
 
-                    homePage.getRestaurantsFromAPICall()
+                    homePage.getRestaurantsFromAPI()
                         .then((unfilteredRestaurants: Array<Restaurant>) => {
 
                             homePage.getRestaurants()

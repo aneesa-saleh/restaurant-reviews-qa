@@ -1,7 +1,10 @@
-import { Restaurant } from "../../models/restaurant";
+import { API } from "../API";
+import { Restaurant } from "../models/restaurant";
+import { Cuisines, Neighborhoods } from "../common/constants";
 
-export class HomePage {
+export class HomePage extends API {
     constructor() {
+        super()
         this.visit()
     }
 
@@ -52,7 +55,7 @@ export class HomePage {
         return restaurantElement.find('a')
     }
 
-    getElementsOfRestaurant(restaurantElement: JQuery<HTMLElement>): ElementsOfRestaurant {
+    getElementsOfRestaurant(restaurantElement: JQuery<HTMLElement>): RestaurantElements {
             
             const nameElement = this.getNameElementOfRestaurant(restaurantElement)
             const imageElement = this.getImageElementOfRestaurant(restaurantElement)
@@ -133,7 +136,7 @@ export class HomePage {
     filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
         this.selectNeighborhood(neighborhood)
         
-        return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
+        return this.getRestaurantsFromAPI().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>
             restaurants.filter(restaurant => restaurant.neighborhood === neighborhood)
                 .forEach((restaurant: Restaurant) => {
@@ -147,7 +150,7 @@ export class HomePage {
     filterRestaurantsByCuisine(cuisine: Cuisines): Cypress.Chainable<Set<string>> {
         this.selectCuisine(cuisine)
 
-        return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
+        return this.getRestaurantsFromAPI().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>
             restaurants.filter(restaurant => restaurant.cuisine_type === cuisine)
                 .forEach((restaurant: Restaurant) => {
@@ -162,7 +165,7 @@ export class HomePage {
         this.selectNeighborhood(neighborhood)
         this.selectCuisine(cuisine)
 
-        return this.getRestaurantsFromAPICall().then((restaurants: Array<Restaurant>) => {
+        return this.getRestaurantsFromAPI().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>
             restaurants.filter(
                     restaurant => restaurant.cuisine_type === cuisine && restaurant.neighborhood === neighborhood
@@ -174,80 +177,9 @@ export class HomePage {
             return cy.wrap(filteredRestaurants)
         })
     }
-
-    /* API */
-
-    getRestaurantsFromAPICall(): Cypress.Chainable<Array<Restaurant>> {
-        return cy.wait('@restaurantsAPIRequest').then((interception) => {
-            const restaurants: Array<Restaurant> = Array.from(interception.response?.body)
-            return cy.wrap(restaurants)
-        })
-    }
-
-    getRestaurantsCountFromAPICall(): Cypress.Chainable<RestaurantsCount> {
-
-        return this.getRestaurantsFromAPICall().then((restaurantsFromAPI) => {
-            const restaurantsCountFromAPI = restaurantsFromAPI.length
-            return cy.wrap({ restaurantsCountFromAPI })
-        })
-    }
-
-    getRestaurantNamesFromAPICall(): Cypress.Chainable<RestaurantNames> {
-
-        return this.getRestaurantsFromAPICall().then((restaurantsFromAPI) => {
-            const restaurantNamesFromAPI = new Set<string>()
-            restaurantsFromAPI.forEach((restaurant: Restaurant) => {
-                restaurantNamesFromAPI.add(restaurant.name)
-            })
-
-            return cy.wrap({ restaurantNamesFromAPI })
-        })
-    }
-
-    getRestaurantNamesAndCountFromAPICall(): Cypress.Chainable<RestaurantNamesAndCount> {
-
-        return this.getRestaurantsFromAPICall().then((restaurantsFromAPI) => {
-
-            const restaurantNamesFromAPI = new Set<string>()
-
-            restaurantsFromAPI.forEach((restaurant: Restaurant) => {
-                restaurantNamesFromAPI.add(restaurant.name)
-            })
-
-            const restaurantsCountFromAPI = restaurantsFromAPI.length
-
-            return cy.wrap({ restaurantsCountFromAPI, restaurantNamesFromAPI })
-        })
-    }
-
-    mapRestaurantsByName(restaurants: Array<Restaurant>) {
-        const restaurantsMap = new Map<string, Restaurant>()
-
-        restaurants.forEach((restaurant: Restaurant) => {
-            restaurantsMap.set(restaurant.name, restaurant)
-        })
-
-        return restaurantsMap
-    }
-
-    getRestaurantsMappedByName(): Cypress.Chainable<Map<string, Restaurant>> {
-
-        return this.getRestaurantsFromAPICall().then((restaurantsFromAPI) => {
-            const restaurantsMap = this.mapRestaurantsByName(restaurantsFromAPI)
-
-            return cy.wrap(restaurantsMap)
-        })
-    }
 }
 
-export type RestaurantNamesAndCount = {
-    restaurantsCountFromAPI: number;
-    restaurantNamesFromAPI: Set<string>;
-}
 
-export type RestaurantNames = Pick<RestaurantNamesAndCount, 'restaurantNamesFromAPI'>
-
-export type RestaurantsCount = Pick<RestaurantNamesAndCount, 'restaurantsCountFromAPI'>
 
 export type MapPin = {
     title: string
@@ -257,25 +189,10 @@ export type ViewDetailsLink = {
     restaurantName: string
 }
 
-export type ElementsOfRestaurant = {
+export type RestaurantElements = {
     nameElement: JQuery<HTMLElement>;
     imageElement: JQuery<HTMLElement>;
     neighborhoodElement: JQuery<HTMLElement>;
     addressElement: JQuery<HTMLElement>;
     viewDetailsLinkElement: JQuery<HTMLElement>;
-}
-
-export enum Neighborhoods {
-    Manhattan = 'Manhattan',
-    Brooklyn = 'Brooklyn',
-    Queens = 'Queens',
-    AllNeighborhoods = 'All Neighborhoods',
-}
-
-export enum Cuisines {
-    Asian = 'Asian',
-    Pizza = 'Pizza',
-    American = 'American',
-    Mexican = 'Mexican',
-    AllCuisines = 'All Cuisines',
 }

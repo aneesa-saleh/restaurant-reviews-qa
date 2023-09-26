@@ -1,4 +1,4 @@
-export interface Restaurant {
+export type Restaurant = {
     name: string;
     neighborhood: string;
     photograph_large: string;
