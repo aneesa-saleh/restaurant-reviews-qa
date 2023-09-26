@@ -17,44 +17,42 @@ describe('Details page', () => {
                         expect(restaurant).not.to.be.null
                         expect(restaurant.name).to.equal(restaurantNameFromLink)
 
-                        cy.getById('restaurant-name')
+                        detailsPage.getRestaurantName()
                             .should('have.length', 1)
                             .and('have.text', restaurant.name)
 
-                        cy.getByClass('restaurant-img')
+                        detailsPage.getRestaurantImage()
                             .should('have.length', 1)
-                            .then((img) => {
-                                expect(img).to.have.attr('alt')
-                                expect(img.attr('alt')).to.equal(restaurant.alt)
-                            })
+                            .and('have.attr', 'alt', restaurant.alt)
 
-                        cy.getById('restaurant-cuisine')
+                        detailsPage.getRestaurantCuisine()
                             .should('have.length', 1)
                             .and('contain.text', restaurant.cuisine_type)
 
-                        cy.getById('map')
+                        detailsPage.getMap()
                             .should('be.visible')
                         
-                        cy.get('img.leaflet-marker-icon')
+                        detailsPage.getMapPin()
                             .should('have.length', 1)
-                            .then((img) => {
-                                expect(img).to.have.attr('alt')
-                                expect(img.attr('alt')).to.equal(restaurant.name)
-                            })
+                            .and('have.attr', 'alt', restaurant.name)
 
-                        cy.getById('restaurant-address')
+                        detailsPage.getRestaurantAddress()
                             .should('have.length', 1)
                             .and('contain.text', restaurant.address)
 
-                        cy.getById('restaurant-hours')
-                            .should('be.visible')
-                            .then((openingHoursTable) => {
-                                expect(openingHoursTable.find('tr')).to.have.length(7)
+                        detailsPage.getOpeningHours()
+                            .then((openingHours) => {
+                                expect(openingHours).to.be.visible
+                                expect(
+                                    detailsPage.getOpeningHoursElements(openingHours)
+                                ).to.have.length(7)
 
                                 const daysOfTheWeek = Object.values(DaysOfTheWeek)
 
                                 daysOfTheWeek.forEach((day) => {
-                                    expect(openingHoursTable.find(`tr:contains("${day}")`)).to.have.length(1)
+                                    expect(
+                                        detailsPage.getOpeningHoursByDay(openingHours, day)
+                                    ).to.have.length(1)
                                 })
                             })
                     })
