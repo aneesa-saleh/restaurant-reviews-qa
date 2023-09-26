@@ -1,4 +1,13 @@
+import { DetailsPageAPI } from "../api/DetailsPageAPI";
+
 export class DetailsPage {
+
+    API: DetailsPageAPI
+
+    constructor() {
+        this.API = new DetailsPageAPI()
+    }
+
     getLocationPathname(): string {
         return '/restaurant.html'
     }

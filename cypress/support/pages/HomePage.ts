@@ -1,12 +1,14 @@
-import { APIHelper } from "../APIHelper";
+import { HomePageAPI } from "../api/HomePageAPI";
 import { Restaurant } from "../models/restaurant";
 import { Cuisines, Neighborhoods } from "../common/constants";
 
 
 export class HomePage {
 
+    API: HomePageAPI
+
     constructor() {
-        APIHelper.interceptRestaurants()
+        this.API = new HomePageAPI()
         this.visit()
     }
 
@@ -135,7 +137,7 @@ export class HomePage {
     filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
         this.selectNeighborhood(neighborhood);
 
-        return APIHelper.getRestaurants().then((restaurants: Array<Restaurant>) => {
+        return this.API.getRestaurants().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>;
             restaurants.filter(restaurant => restaurant.neighborhood === neighborhood)
                 .forEach((restaurant: Restaurant) => {
@@ -149,7 +151,7 @@ export class HomePage {
     filterRestaurantsByCuisine(cuisine: Cuisines): Cypress.Chainable<Set<string>> {
         this.selectCuisine(cuisine);
 
-        return APIHelper.getRestaurants().then((restaurants: Array<Restaurant>) => {
+        return this.API.getRestaurants().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>;
             restaurants.filter(restaurant => restaurant.cuisine_type === cuisine)
                 .forEach((restaurant: Restaurant) => {
@@ -164,7 +166,7 @@ export class HomePage {
         this.selectNeighborhood(neighborhood);
         this.selectCuisine(cuisine);
 
-        return APIHelper.getRestaurants().then((restaurants: Array<Restaurant>) => {
+        return this.API.getRestaurants().then((restaurants: Array<Restaurant>) => {
             const filteredRestaurants = new Set<string>;
             restaurants.filter(
                 restaurant => restaurant.cuisine_type === cuisine && restaurant.neighborhood === neighborhood

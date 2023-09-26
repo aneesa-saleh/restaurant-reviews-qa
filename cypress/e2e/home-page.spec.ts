@@ -2,7 +2,7 @@ import { Restaurant } from "../support/models/restaurant"
 import { DetailsPage } from "../support/pages/DetailsPage"
 import { HomePage, MapPin } from "../support/pages/HomePage"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
-import { APIHelper, RestaurantNamesAndCount } from "../support/APIHelper"
+import { RestaurantNamesAndCount } from "../support/api/HomePageAPI"
 
 describe('Home page', () => {
 
@@ -21,7 +21,7 @@ describe('Home page', () => {
         })
 
         it('renders map location pins correctly', () => {
-            APIHelper.getRestaurantNamesAndCount()
+            homePage.API.getRestaurantNamesAndCount()
                 .then(({restaurantsCountFromAPI, restaurantNamesFromAPI } : RestaurantNamesAndCount) => {
                     homePage.getMapPins()
                         .should('have.length', restaurantsCountFromAPI)
@@ -51,7 +51,7 @@ describe('Home page', () => {
 
     describe('list of restaurants', () => {
         it('shows the correct number of restaurants', () => {
-            APIHelper.getRestaurantsCount()
+            homePage.API.getRestaurantsCount()
                 .then(({ restaurantsCountFromAPI }) => {
                     homePage.getRestaurants()
                         .should('have.length', restaurantsCountFromAPI)
@@ -59,7 +59,7 @@ describe('Home page', () => {
         })
 
         it('shows a complete summary of each restaurant', () => {
-            APIHelper.getRestaurantsMappedByName()
+            homePage.API.getRestaurantsMappedByName()
                 .then((restaurantsByName) => {
                     homePage.getRestaurants().each(
                         (restaurantElement) => {
@@ -128,7 +128,7 @@ describe('Home page', () => {
                 .then(() => {
                     homePage.resetFilters()
 
-                    APIHelper.getRestaurants()
+                    homePage.API.getRestaurants()
                         .then((unfilteredRestaurants: Array<Restaurant>) => {
 
                             homePage.getRestaurants()
