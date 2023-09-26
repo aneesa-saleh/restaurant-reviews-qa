@@ -9,7 +9,6 @@ export class HomePage extends API {
     }
 
     private visit() {
-        cy.intercept('/restaurants').as('restaurantsAPIRequest')
         cy.visit('/')
     }
 

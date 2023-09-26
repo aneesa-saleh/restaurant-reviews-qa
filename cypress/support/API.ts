@@ -1,6 +1,10 @@
 import { Restaurant } from "./models/restaurant"
 
 export class API {
+    constructor() {
+        cy.intercept('/restaurants').as('restaurantsAPIRequest')
+    }
+
     getRestaurantsFromAPI(): Cypress.Chainable<Array<Restaurant>> {
         return cy.wait('@restaurantsAPIRequest').then((interception) => {
             const restaurants: Array<Restaurant> = Array.from(interception.response?.body)
