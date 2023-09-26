@@ -1,6 +1,6 @@
 import { Restaurant } from "../support/models/restaurant"
-import { DetailsPage } from "../support/pages/details-page"
-import { HomePage, MapPin } from "../support/pages/home-page"
+import { DetailsPage } from "../support/pages/DetailsPage"
+import { HomePage, MapPin } from "../support/pages/HomePage"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
 import { APIHelper, RestaurantNamesAndCount } from "../support/APIHelper"
 
