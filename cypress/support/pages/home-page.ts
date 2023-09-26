@@ -24,14 +24,11 @@ export class HomePage {
         return cy.get('#restaurants-list article')
     }
 
-    getNameElementOfRestaurantArticle(article: JQuery<HTMLElement>):
-        Cypress.Chainable<JQuery<HTMLHeadingElement>> {
-            
-            return cy.wrap(article).find('h2')
+    getNameOfRestaurantArticle(article: JQuery<HTMLElement>): string {
+            return article.find('h2').text()
     }
 
-    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>):
-        Cypress.Chainable<RestaurantArticle> {
+    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>): RestaurantArticle {
             
             const nameElement = cy.wrap(article).find('h2')
             const imageElement = cy.wrap(article).find('img')
@@ -46,13 +43,13 @@ export class HomePage {
             const viewDetailsLinkElement = cy.wrap(article)
                 .find('a')
 
-            return cy.wrap({
+            return {
                 nameElement,
                 imageElement,
                 neighborhoodElement,
                 addressElement,
                 viewDetailsLinkElement
-            })
+            }
     }
 
     /* UI actions */

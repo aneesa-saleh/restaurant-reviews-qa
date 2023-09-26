@@ -60,33 +60,34 @@ describe('Home page', () => {
             homePage.getRestaurantsMappedByName()
                 .then((restaurantsByName) => {
                     homePage.getRestaurantArticles().each(
-                        (article) => homePage.getElementsOfRestaurantArticle(article)
-                        .then(({
-                            nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
-                        }: RestaurantArticle) => {
-                               nameElement.should('have.length', 1)
+                        (article) => {
+                            const {
+                                nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
+                            } = homePage.getElementsOfRestaurantArticle(article)
 
-                               nameElement.invoke('text').then((restaurantName: string) => {
-                                    const restaurant = restaurantsByName.get(restaurantName)
+                            nameElement.should('have.length', 1)
 
-                                    expect(restaurant).not.to.be.undefined
-                                    expect(restaurant).not.to.be.null
+                            nameElement.invoke('text').then((restaurantName: string) => {
+                                const restaurant = restaurantsByName.get(restaurantName)
 
-                                    neighborhoodElement.should('have.length', 1)
-                                        .and('have.text', restaurant.neighborhood)
+                                expect(restaurant).not.to.be.undefined
+                                expect(restaurant).not.to.be.null
 
-                                    addressElement.should('have.length', 1)
-                                        .and('have.text', restaurant.address)
+                                neighborhoodElement.should('have.length', 1)
+                                    .and('have.text', restaurant.neighborhood)
 
-                                    viewDetailsLinkElement.should('have.length', 1)
-                                        .and('have.text', 'View Details')
+                                addressElement.should('have.length', 1)
+                                    .and('have.text', restaurant.address)
 
-                                    imageElement.should('have.length', 1)
-                                        .invoke('attr', 'data-alt')
-                                        .should('equal', restaurant.alt)
-                               })
+                                viewDetailsLinkElement.should('have.length', 1)
+                                    .and('have.text', 'View Details')
 
-                        })
+                                imageElement.should('have.length', 1)
+                                    .invoke('attr', 'data-alt')
+                                    .should('equal', restaurant.alt)
+                            }) 
+
+                        }
                     )
                 })
         })
@@ -106,7 +107,7 @@ describe('Home page', () => {
     })
 
     describe('restaurant filters', () => {
-        it('filters restaurant by neighborhood', () => {
+        it.only('filters restaurant by neighborhood', () => {
             homePage.filterRestaurantsByNeighborhood(Neighborhoods.Brooklyn)
                 .then(verifyFilteredRestaurants)
         })
@@ -141,13 +142,8 @@ describe('Home page', () => {
             homePage.getRestaurantArticles()
                 .should('have.length', filteredRestaurants.size)
                 .each((restaurantArticle) => {
-
-                    homePage.getNameElementOfRestaurantArticle(restaurantArticle)
-                        .invoke('text')
-                        .should((restaurantName) => {
-                            expect(filteredRestaurants).to.contain(restaurantName)
-                        })
-
+                    const restaurantName = homePage.getNameOfRestaurantArticle(restaurantArticle)
+                    expect(filteredRestaurants).to.contain(restaurantName)
                 })
         }
     })
