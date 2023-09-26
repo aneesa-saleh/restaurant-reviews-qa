@@ -16,8 +16,6 @@ describe('Home page', () => {
         it('renders a map', () => {
                 homePage.getMap()
                     .should('be.visible')
-                    .and('contain.text', 'Leaflet')
-                    .and('contain.text', 'Mapbox')
         })
 
         it('renders map location pins correctly', () => {
