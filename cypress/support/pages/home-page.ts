@@ -1,192 +1,190 @@
-import { API } from "../API";
+import { APIHelper } from "../API";
 import { Restaurant } from "../models/restaurant";
 import { Cuisines, Neighborhoods } from "../common/constants";
 
-export class HomePage extends API {
+
+export class HomePage {
+
     constructor() {
-        super()
+        APIHelper.interceptRestaurants()
         this.visit()
     }
 
     private visit() {
-        cy.visit('/')
+        cy.visit('/');
     }
 
     /* locators */
-
     getMap(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.getById('map')
+        return cy.getById('map');
     }
 
     getMapPins(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get('img.leaflet-marker-icon')
+        return cy.get('img.leaflet-marker-icon');
     }
 
     getRestaurants(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get('#restaurants-list article')
+        return cy.get('#restaurants-list article');
     }
 
     getNameOfRestaurantFromElement(restaurantElement: JQuery<HTMLElement>): string {
-        return restaurantElement.find('h2').text()
+        return restaurantElement.find('h2').text();
     }
 
     getNameElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
-        return restaurantElement.find('h2')
+        return restaurantElement.find('h2');
     }
 
     getImageElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
-        return restaurantElement.find('img')
+        return restaurantElement.find('img');
     }
 
     getNaighborhoodElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
         return restaurantElement
             .find('p')
-            .first()
+            .first();
     }
 
     getAddressElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
         return restaurantElement
             .find('p')
-            .eq(1)
+            .eq(1);
     }
 
     getViewDetailsElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
-        return restaurantElement.find('a')
+        return restaurantElement.find('a');
     }
 
     getElementsOfRestaurant(restaurantElement: JQuery<HTMLElement>): RestaurantElements {
-            
-            const nameElement = this.getNameElementOfRestaurant(restaurantElement)
-            const imageElement = this.getImageElementOfRestaurant(restaurantElement)
-            const neighborhoodElement = this.getNaighborhoodElementOfRestaurant(restaurantElement)
-            const addressElement = this.getAddressElementOfRestaurant(restaurantElement)
-            const viewDetailsLinkElement = this.getViewDetailsElementOfRestaurant(restaurantElement)
 
-            return {
-                nameElement,
-                imageElement,
-                neighborhoodElement,
-                addressElement,
-                viewDetailsLinkElement
-            }
+        const nameElement = this.getNameElementOfRestaurant(restaurantElement);
+        const imageElement = this.getImageElementOfRestaurant(restaurantElement);
+        const neighborhoodElement = this.getNaighborhoodElementOfRestaurant(restaurantElement);
+        const addressElement = this.getAddressElementOfRestaurant(restaurantElement);
+        const viewDetailsLinkElement = this.getViewDetailsElementOfRestaurant(restaurantElement);
+
+        return {
+            nameElement,
+            imageElement,
+            neighborhoodElement,
+            addressElement,
+            viewDetailsLinkElement
+        };
     }
 
     getNeighborhoodSelect(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.getById('neighborhoods-select')
+        return cy.getById('neighborhoods-select');
     }
 
     getCuisineSelect(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.getById('cuisines-select')
+        return cy.getById('cuisines-select');
     }
 
     /* UI actions */
-
     clickMapPin(index: number): Cypress.Chainable<MapPin> {
         // need this since we plan on going to a new page
         // when we click the map pin
-        cy.unregisterAllServiceWorkers()
+        cy.unregisterAllServiceWorkers();
 
         return this.getMapPins()
             // first make sure a map pin exists at that index, otherwise fail the test
             .should('have.length.greaterThan', index)
             .eq(index)
             .then((mapPin) => {
-                const title = mapPin.attr('title')
+                const title = mapPin.attr('title');
 
-                cy.wrap(mapPin).click()
+                cy.wrap(mapPin).click();
 
-                return cy.wrap({ title })
-            })
+                return cy.wrap({ title });
+            });
     }
 
     clickViewDetailsLink(index: number): Cypress.Chainable<ViewDetailsLink> {
         // need this since we plan on going to a new page
         // when we click the link
-        cy.unregisterAllServiceWorkers()
+        cy.unregisterAllServiceWorkers();
 
         return this.getRestaurants()
             .should('have.length.greaterThan', index)
             .eq(index)
             .then((restaurantElement) => {
-                const restaurantName = this.getNameOfRestaurantFromElement(restaurantElement)
+                const restaurantName = this.getNameOfRestaurantFromElement(restaurantElement);
 
                 cy.wrap(this.getViewDetailsElementOfRestaurant(restaurantElement))
-                    .click()
+                    .click();
 
-                return cy.wrap({ restaurantName })
-            })
+                return cy.wrap({ restaurantName });
+            });
     }
 
     selectNeighborhood(neighborhood: Neighborhoods) {
         this.getNeighborhoodSelect()
-            .select(neighborhood)
+            .select(neighborhood);
     }
 
     selectCuisine(cuisine: Cuisines) {
         this.getCuisineSelect()
-            .select(cuisine)
+            .select(cuisine);
     }
 
     resetFilters() {
-        this.selectNeighborhood(Neighborhoods.AllNeighborhoods)
-        this.selectCuisine(Cuisines.AllCuisines)
+        this.selectNeighborhood(Neighborhoods.AllNeighborhoods);
+        this.selectCuisine(Cuisines.AllCuisines);
     }
 
     filterRestaurantsByNeighborhood(neighborhood: Neighborhoods): Cypress.Chainable<Set<string>> {
-        this.selectNeighborhood(neighborhood)
-        
-        return this.getRestaurantsFromAPI().then((restaurants: Array<Restaurant>) => {
-            const filteredRestaurants = new Set<string>
+        this.selectNeighborhood(neighborhood);
+
+        return APIHelper.getRestaurants().then((restaurants: Array<Restaurant>) => {
+            const filteredRestaurants = new Set<string>;
             restaurants.filter(restaurant => restaurant.neighborhood === neighborhood)
                 .forEach((restaurant: Restaurant) => {
-                    filteredRestaurants.add(restaurant.name)
-                })
-                
-            return cy.wrap(filteredRestaurants)
-        })
+                    filteredRestaurants.add(restaurant.name);
+                });
+
+            return cy.wrap(filteredRestaurants);
+        });
     }
 
     filterRestaurantsByCuisine(cuisine: Cuisines): Cypress.Chainable<Set<string>> {
-        this.selectCuisine(cuisine)
+        this.selectCuisine(cuisine);
 
-        return this.getRestaurantsFromAPI().then((restaurants: Array<Restaurant>) => {
-            const filteredRestaurants = new Set<string>
+        return APIHelper.getRestaurants().then((restaurants: Array<Restaurant>) => {
+            const filteredRestaurants = new Set<string>;
             restaurants.filter(restaurant => restaurant.cuisine_type === cuisine)
                 .forEach((restaurant: Restaurant) => {
-                    filteredRestaurants.add(restaurant.name)
-                })
-                
-            return cy.wrap(filteredRestaurants)
-        })
+                    filteredRestaurants.add(restaurant.name);
+                });
+
+            return cy.wrap(filteredRestaurants);
+        });
     }
 
     filterRestaurantsByNeighborhoodAndCuisine(neighborhood: Neighborhoods, cuisine: Cuisines): Cypress.Chainable<Set<string>> {
-        this.selectNeighborhood(neighborhood)
-        this.selectCuisine(cuisine)
+        this.selectNeighborhood(neighborhood);
+        this.selectCuisine(cuisine);
 
-        return this.getRestaurantsFromAPI().then((restaurants: Array<Restaurant>) => {
-            const filteredRestaurants = new Set<string>
+        return APIHelper.getRestaurants().then((restaurants: Array<Restaurant>) => {
+            const filteredRestaurants = new Set<string>;
             restaurants.filter(
-                    restaurant => restaurant.cuisine_type === cuisine && restaurant.neighborhood === neighborhood
-                )
+                restaurant => restaurant.cuisine_type === cuisine && restaurant.neighborhood === neighborhood
+            )
                 .forEach((restaurant: Restaurant) => {
-                    filteredRestaurants.add(restaurant.name)
-                })
-                
-            return cy.wrap(filteredRestaurants)
-        })
+                    filteredRestaurants.add(restaurant.name);
+                });
+
+            return cy.wrap(filteredRestaurants);
+        });
     }
 }
 
-
-
 export type MapPin = {
-    title: string
-}
+    title: string;
+};
 
 export type ViewDetailsLink = {
-    restaurantName: string
-}
+    restaurantName: string;
+};
 
 export type RestaurantElements = {
     nameElement: JQuery<HTMLElement>;
@@ -194,4 +192,5 @@ export type RestaurantElements = {
     neighborhoodElement: JQuery<HTMLElement>;
     addressElement: JQuery<HTMLElement>;
     viewDetailsLinkElement: JQuery<HTMLElement>;
-}
+};
+
