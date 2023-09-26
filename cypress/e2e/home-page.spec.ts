@@ -21,7 +21,7 @@ describe('Home page', () => {
         })
 
         it('renders map location pins correctly', () => {
-            APIHelper.getRestaurantNamesAndCountFromAPI()
+            APIHelper.getRestaurantNamesAndCount()
                 .then(({restaurantsCountFromAPI, restaurantNamesFromAPI } : RestaurantNamesAndCount) => {
                     homePage.getMapPins()
                         .should('have.length', restaurantsCountFromAPI)

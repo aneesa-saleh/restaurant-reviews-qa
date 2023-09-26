@@ -12,7 +12,7 @@ export class APIHelper {
         })
     }
 
-    static getRestaurantFromAPIById(id: number): Cypress.Chainable<Restaurant | null> {
+    static getRestaurantById(id: number): Cypress.Chainable<Restaurant | null> {
         return cy.wait('@restaurantsAPIRequest').then((interception) => {
             const restaurants: Array<Restaurant> = Array.from(interception.response?.body)
             const restaurant = restaurants.find(restaurant => restaurant.id === id) || null
@@ -20,7 +20,7 @@ export class APIHelper {
         })
     }
 
-    static getRestaurantFromAPIByName(name: string): Cypress.Chainable<Restaurant | null> {
+    static getRestaurantByName(name: string): Cypress.Chainable<Restaurant | null> {
         return cy.wait('@restaurantsAPIRequest').then((interception) => {
             const restaurants: Array<Restaurant> = Array.from(interception.response?.body)
             const restaurant = restaurants.find(restaurant => restaurant.name === name) || null
@@ -36,7 +36,7 @@ export class APIHelper {
         })
     }
 
-    static getRestaurantNamesFromAPI(): Cypress.Chainable<RestaurantNames> {
+    static getRestaurantNames(): Cypress.Chainable<RestaurantNames> {
 
         return APIHelper.getRestaurants().then((restaurantsFromAPI) => {
             const restaurantNamesFromAPI = new Set<string>()
@@ -48,7 +48,7 @@ export class APIHelper {
         })
     }
 
-    static getRestaurantNamesAndCountFromAPI(): Cypress.Chainable<RestaurantNamesAndCount> {
+    static getRestaurantNamesAndCount(): Cypress.Chainable<RestaurantNamesAndCount> {
 
         return APIHelper.getRestaurants().then((restaurantsFromAPI) => {
 
