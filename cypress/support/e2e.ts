@@ -7,5 +7,5 @@ beforeEach(() => {
     cy.unregisterAllServiceWorkers()
 
     // stub map tiles
-    cy.intercept(/^https:\/\/api.tiles.mapbox.com/g, { fixture: 'blank.jpg70,null', statusCode: 200 })
+    cy.intercept(/^https:\/\/api.tiles.mapbox.com/g, { fixture: '70by70.png,null', statusCode: 200 })
 })
