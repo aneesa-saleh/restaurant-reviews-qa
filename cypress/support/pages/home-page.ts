@@ -28,19 +28,19 @@ export class HomePage {
             return article.find('h2').text()
     }
 
-    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>): RestaurantArticle {
+    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>): RestaurantArticleElements {
             
-            const nameElement = cy.wrap(article).find('h2')
-            const imageElement = cy.wrap(article).find('img')
-            const neighborhoodElement = cy.wrap(article)
+            const nameElement = article.find('h2')
+            const imageElement = article.find('img')
+            const neighborhoodElement = article
                 .find('p')
                 .first()
 
-            const addressElement = cy.wrap(article)
+            const addressElement = article
                 .find('p')
                 .eq(1)
 
-            const viewDetailsLinkElement = cy.wrap(article)
+            const viewDetailsLinkElement = article
                 .find('a')
 
             return {
@@ -227,12 +227,12 @@ export interface MapPin {
     restaurantName: string;
 }
 
-export interface RestaurantArticle {
-    nameElement: Cypress.Chainable<JQuery<HTMLHeadingElement>>;
-    imageElement: Cypress.Chainable<JQuery<HTMLImageElement>>;
-    neighborhoodElement: Cypress.Chainable<JQuery<HTMLParagraphElement>>;
-    addressElement: Cypress.Chainable<JQuery<HTMLElement>>;
-    viewDetailsLinkElement: Cypress.Chainable<JQuery<HTMLAnchorElement>>;
+export interface RestaurantArticleElements {
+    nameElement: JQuery<HTMLElement>;
+    imageElement: JQuery<HTMLElement>;
+    neighborhoodElement: JQuery<HTMLElement>;
+    addressElement: JQuery<HTMLElement>;
+    viewDetailsLinkElement: JQuery<HTMLElement>;
 }
 
 export enum Neighborhoods {

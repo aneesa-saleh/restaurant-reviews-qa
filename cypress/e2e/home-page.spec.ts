@@ -1,6 +1,6 @@
 import { Restaurant } from "../models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
-import { Cuisines, HomePage, Neighborhoods, RestaurantArticle, RestaurantNamesAndCount } from "../support/pages/home-page"
+import { Cuisines, HomePage, Neighborhoods, RestaurantArticleElements, RestaurantNamesAndCount } from "../support/pages/home-page"
 
 describe('Home page', () => {
 
@@ -65,27 +65,26 @@ describe('Home page', () => {
                                 nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
                             } = homePage.getElementsOfRestaurantArticle(article)
 
-                            nameElement.should('have.length', 1)
+                            expect(nameElement).to.have.lengthOf(1)
 
-                            nameElement.invoke('text').then((restaurantName: string) => {
-                                const restaurant = restaurantsByName.get(restaurantName)
+                            const restaurantName = nameElement.text()
+                            const restaurant = restaurantsByName.get(restaurantName)
 
-                                expect(restaurant).not.to.be.undefined
-                                expect(restaurant).not.to.be.null
+                            expect(restaurant).not.to.be.undefined
+                            expect(restaurant).not.to.be.null
 
-                                neighborhoodElement.should('have.length', 1)
-                                    .and('have.text', restaurant.neighborhood)
+                            expect(neighborhoodElement).to.have.lengthOf(1)
+                                .and.to.have.text(restaurant.neighborhood)
 
-                                addressElement.should('have.length', 1)
-                                    .and('have.text', restaurant.address)
+                            expect(addressElement).to.have.lengthOf(1)
+                                .and.to.have.text(restaurant.address)
 
-                                viewDetailsLinkElement.should('have.length', 1)
-                                    .and('have.text', 'View Details')
+                            expect(viewDetailsLinkElement).to.have.lengthOf(1)
+                                .and.to.have.text('View Details')
 
-                                imageElement.should('have.length', 1)
-                                    .invoke('attr', 'data-alt')
-                                    .should('equal', restaurant.alt)
-                            }) 
+                            expect(imageElement).to.have.lengthOf(1)
+                            expect(imageElement.attr('data-alt'))
+                                .to.have.equal(restaurant.alt)
 
                         }
                     )
@@ -107,7 +106,7 @@ describe('Home page', () => {
     })
 
     describe('restaurant filters', () => {
-        it.only('filters restaurant by neighborhood', () => {
+        it('filters restaurant by neighborhood', () => {
             homePage.filterRestaurantsByNeighborhood(Neighborhoods.Brooklyn)
                 .then(verifyFilteredRestaurants)
         })
