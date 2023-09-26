@@ -1,6 +1,5 @@
 import { Restaurant } from "../support/models/restaurant"
-import { DetailsPage } from "../support/pages/DetailsPage"
-import { HomePage, MapPin } from "../support/pages/HomePage"
+import { HomePage } from "../support/pages/HomePage"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
 import { RestaurantNamesAndCount } from "../support/api/HomePageAPI"
 
@@ -34,15 +33,14 @@ describe('Home page', () => {
         })
 
         it('links to restaurant details page when a pin is clicked', () => {
-            const detailsPage: DetailsPage = new DetailsPage()
 
             homePage.clickMapPin(0)
-                .then((mapPin: MapPin) => {
+                .then(({ title, detailsPage }) => {
                     cy.location('pathname')
                         .should('equal', detailsPage.getLocationPathname())
 
                     detailsPage.getRestaurantName()
-                        .should('have.text', mapPin.title)
+                        .should('have.text', title)
                 })
         })
     })
@@ -57,45 +55,40 @@ describe('Home page', () => {
         })
 
         it('shows a complete summary of each restaurant', () => {
-            homePage.API.getRestaurantsMappedByName()
-                .then((restaurantsByName) => {
-                    homePage.getRestaurants().each(
-                        (restaurantElement) => {
-                            const {
-                                nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
-                            } = homePage.getElementsOfRestaurant(restaurantElement)
+            homePage.API.getRestaurantsMappedByName().then((restaurantsByName) => {
+                    homePage.getRestaurants().each((restaurantElement) => {
+                        const {
+                            nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
+                        } = homePage.getElementsOfRestaurant(restaurantElement)
 
-                            expect(nameElement).to.have.lengthOf(1)
+                        expect(nameElement).to.have.lengthOf(1)
 
-                            const restaurantName = nameElement.text()
-                            const restaurant = restaurantsByName.get(restaurantName)
+                        const restaurantName = nameElement.text()
+                        const restaurant = restaurantsByName.get(restaurantName)
 
-                            expect(restaurant).not.to.be.undefined
-                            expect(restaurant).not.to.be.null
+                        expect(restaurant).not.to.be.undefined
+                        expect(restaurant).not.to.be.null
 
-                            expect(neighborhoodElement).to.have.lengthOf(1)
-                                .and.to.have.text(restaurant.neighborhood)
+                        expect(neighborhoodElement).to.have.lengthOf(1)
+                            .and.to.have.text(restaurant.neighborhood)
 
-                            expect(addressElement).to.have.lengthOf(1)
-                                .and.to.have.text(restaurant.address)
+                        expect(addressElement).to.have.lengthOf(1)
+                            .and.to.have.text(restaurant.address)
 
-                            expect(viewDetailsLinkElement).to.have.lengthOf(1)
-                                .and.to.have.text('View Details')
+                        expect(viewDetailsLinkElement).to.have.lengthOf(1)
+                            .and.to.have.text('View Details')
 
-                            expect(imageElement).to.have.lengthOf(1)
-                            expect(imageElement.attr('data-alt'))
-                                .to.have.equal(restaurant.alt)
+                        expect(imageElement).to.have.lengthOf(1)
+                        expect(imageElement.attr('data-alt'))
+                            .to.have.equal(restaurant.alt)
 
-                        }
-                    )
-                })
+                    })
+            })
         })
 
         it('links to restaurant details page when view details link is clicked', () => {
-            const detailsPage: DetailsPage = new DetailsPage()
-
             homePage.clickViewDetailsLink(0)
-                .then(({ restaurantName }) => {
+                .then(({ restaurantName, detailsPage }) => {
                     cy.location('pathname')
                         .should('equal', detailsPage.getLocationPathname())
 

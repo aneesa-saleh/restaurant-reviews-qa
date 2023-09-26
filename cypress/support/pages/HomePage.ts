@@ -1,6 +1,7 @@
 import { HomePageAPI } from "../api/HomePageAPI";
 import { Restaurant } from "../models/restaurant";
 import { Cuisines, Neighborhoods } from "../common/constants";
+import { DetailsPage } from "./DetailsPage";
 
 
 export class HomePage {
@@ -93,11 +94,12 @@ export class HomePage {
             .should('have.length.greaterThan', index)
             .eq(index)
             .then((mapPin) => {
-                const title = mapPin.attr('title');
+                const title = mapPin.attr('title')
+                const detailsPage = new DetailsPage()
 
                 cy.wrap(mapPin).click();
 
-                return cy.wrap({ title });
+                return cy.wrap({ title, detailsPage })
             });
     }
 
@@ -110,12 +112,13 @@ export class HomePage {
             .should('have.length.greaterThan', index)
             .eq(index)
             .then((restaurantElement) => {
-                const restaurantName = this.getNameOfRestaurantFromElement(restaurantElement);
+                const restaurantName = this.getNameOfRestaurantFromElement(restaurantElement)
+                const detailsPage = new DetailsPage()
 
                 cy.wrap(this.getViewDetailsElementOfRestaurant(restaurantElement))
                     .click();
 
-                return cy.wrap({ restaurantName });
+                return cy.wrap({ restaurantName, detailsPage });
             });
     }
 
@@ -182,10 +185,12 @@ export class HomePage {
 
 export type MapPin = {
     title: string;
+    detailsPage: DetailsPage;
 };
 
 export type ViewDetailsLink = {
     restaurantName: string;
+    detailsPage: DetailsPage;
 };
 
 export type RestaurantElements = {

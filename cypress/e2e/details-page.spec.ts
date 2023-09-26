@@ -1,7 +1,5 @@
-import { HomePageAPI } from "../support/api/HomePageAPI"
 import { DaysOfTheWeek } from "../support/common/constants"
 import { Restaurant } from "../support/models/restaurant"
-import { DetailsPage } from "../support/pages/DetailsPage"
 import { HomePage } from "../support/pages/HomePage"
 
 describe('Details page', () => {
@@ -13,10 +11,8 @@ describe('Details page', () => {
     })
 
     describe('details of a restaurant', () => {
-        it.only('shows complete details', () => {
-            const detailsPage = new DetailsPage()
-
-            homePage.clickViewDetailsLink(5).then(({ restaurantName: restaurantNameFromLink }) => {
+        it('shows complete details', () => {
+            homePage.clickViewDetailsLink(5).then(({ restaurantName: restaurantNameFromLink, detailsPage }) => {
                 detailsPage.API.getRestaurantDetails().then((restaurant: Restaurant) => {
                         expect(restaurant).not.to.be.null
                         expect(restaurant.name).to.equal(restaurantNameFromLink)
