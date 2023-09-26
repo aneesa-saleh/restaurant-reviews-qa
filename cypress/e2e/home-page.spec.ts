@@ -1,7 +1,7 @@
 import { Restaurant } from "../support/models/restaurant"
 import { HomePage } from "../support/pages/HomePage"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
-import { RestaurantNamesAndCount } from "../support/api/HomePageAPI"
+import { RestaurantNamesAndCount } from "../support/pages/api/HomePageAPI"
 
 describe('Home page', () => {
 

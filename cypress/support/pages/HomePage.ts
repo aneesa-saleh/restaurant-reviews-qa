@@ -1,4 +1,4 @@
-import { HomePageAPI } from "../api/HomePageAPI";
+import { HomePageAPI } from "./api/HomePageAPI";
 import { Restaurant } from "../models/restaurant";
 import { Cuisines, Neighborhoods } from "../common/constants";
 import { DetailsPage } from "./DetailsPage";

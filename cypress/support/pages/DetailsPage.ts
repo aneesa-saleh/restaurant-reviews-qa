@@ -1,4 +1,4 @@
-import { DetailsPageAPI } from "../api/DetailsPageAPI";
+import { DetailsPageAPI } from "./api/DetailsPageAPI";
 
 export class DetailsPage {
 
