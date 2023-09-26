@@ -1,4 +1,4 @@
-import { APIHelper } from "../API";
+import { APIHelper } from "../APIHelper";
 import { Restaurant } from "../models/restaurant";
 import { Cuisines, Neighborhoods } from "../common/constants";
 

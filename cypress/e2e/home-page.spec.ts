@@ -2,7 +2,7 @@ import { Restaurant } from "../support/models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
 import { HomePage, MapPin } from "../support/pages/home-page"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
-import { APIHelper, RestaurantNamesAndCount } from "../support/API"
+import { APIHelper, RestaurantNamesAndCount } from "../support/APIHelper"
 
 describe('Home page', () => {
 
