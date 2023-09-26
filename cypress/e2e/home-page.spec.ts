@@ -1,6 +1,6 @@
 import { Restaurant } from "../models/restaurant"
 import { DetailsPage } from "../support/pages/details-page"
-import { Cuisines, HomePage, Neighborhoods, RestaurantArticleElements, RestaurantNamesAndCount } from "../support/pages/home-page"
+import { Cuisines, HomePage, Neighborhoods, ElementsOfRestaurant, RestaurantNamesAndCount, MapPin } from "../support/pages/home-page"
 
 describe('Home page', () => {
 
@@ -36,13 +36,13 @@ describe('Home page', () => {
         it('links to restaurant details page when a pin is clicked', () => {
             const detailsPage: DetailsPage = new DetailsPage()
 
-            homePage.clickFirstMapPin()
-                .then(({ restaurantName }) => {
+            homePage.clickMapPin(0)
+                .then((mapPin: MapPin) => {
                     cy.location('pathname')
                         .should('equal', detailsPage.getLocationPathname())
 
                     detailsPage.getRestaurantName()
-                        .should('have.text', restaurantName)
+                        .should('have.text', mapPin.title)
                 })
         })
     })
@@ -51,7 +51,7 @@ describe('Home page', () => {
         it('shows the correct number of restaurants', () => {
             homePage.getRestaurantsCountFromAPICall()
                 .then(({ restaurantsCountFromAPI }) => {
-                    homePage.getRestaurantArticles()
+                    homePage.getRestaurants()
                         .should('have.length', restaurantsCountFromAPI)
                 })
         })
@@ -59,11 +59,11 @@ describe('Home page', () => {
         it('shows a complete summary of each restaurant', () => {
             homePage.getRestaurantsMappedByName()
                 .then((restaurantsByName) => {
-                    homePage.getRestaurantArticles().each(
-                        (article) => {
+                    homePage.getRestaurants().each(
+                        (restaurantElement) => {
                             const {
                                 nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
-                            } = homePage.getElementsOfRestaurantArticle(article)
+                            } = homePage.getElementsOfRestaurant(restaurantElement)
 
                             expect(nameElement).to.have.lengthOf(1)
 
@@ -94,7 +94,7 @@ describe('Home page', () => {
         it('links to restaurant details page when view details link is clicked', () => {
             const detailsPage: DetailsPage = new DetailsPage()
 
-            homePage.clickFirstViewDetailsLink()
+            homePage.clickViewDetailsLink(0)
                 .then(({ restaurantName }) => {
                     cy.location('pathname')
                         .should('equal', detailsPage.getLocationPathname())
@@ -129,7 +129,7 @@ describe('Home page', () => {
                     homePage.getRestaurantsFromAPICall()
                         .then((unfilteredRestaurants: Array<Restaurant>) => {
 
-                            homePage.getRestaurantArticles()
+                            homePage.getRestaurants()
                                 .should('have.length', unfilteredRestaurants.length)
 
                         })
@@ -138,10 +138,10 @@ describe('Home page', () => {
         })
 
         function verifyFilteredRestaurants(filteredRestaurants: Set<string>) {
-            homePage.getRestaurantArticles()
+            homePage.getRestaurants()
                 .should('have.length', filteredRestaurants.size)
-                .each((restaurantArticle) => {
-                    const restaurantName = homePage.getNameOfRestaurantArticle(restaurantArticle)
+                .each((restaurantElement) => {
+                    const restaurantName = homePage.getNameOfRestaurantFromElement(restaurantElement)
                     expect(filteredRestaurants).to.contain(restaurantName)
                 })
         }

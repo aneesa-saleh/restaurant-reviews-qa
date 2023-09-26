@@ -20,28 +20,45 @@ export class HomePage {
         return cy.get('img.leaflet-marker-icon')
     }
 
-    getRestaurantArticles(): Cypress.Chainable<JQuery<HTMLElement>> {
+    getRestaurants(): Cypress.Chainable<JQuery<HTMLElement>> {
         return cy.get('#restaurants-list article')
     }
 
-    getNameOfRestaurantArticle(article: JQuery<HTMLElement>): string {
-            return article.find('h2').text()
+    getNameOfRestaurantFromElement(restaurantElement: JQuery<HTMLElement>): string {
+        return restaurantElement.find('h2').text()
     }
 
-    getElementsOfRestaurantArticle(article: JQuery<HTMLElement>): RestaurantArticleElements {
+    getNameElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
+        return restaurantElement.find('h2')
+    }
+
+    getImageElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
+        return restaurantElement.find('img')
+    }
+
+    getNaighborhoodElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
+        return restaurantElement
+            .find('p')
+            .first()
+    }
+
+    getAddressElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
+        return restaurantElement
+            .find('p')
+            .eq(1)
+    }
+
+    getViewDetailsElementOfRestaurant(restaurantElement: JQuery<HTMLElement>): JQuery<HTMLElement> {
+        return restaurantElement.find('a')
+    }
+
+    getElementsOfRestaurant(restaurantElement: JQuery<HTMLElement>): ElementsOfRestaurant {
             
-            const nameElement = article.find('h2')
-            const imageElement = article.find('img')
-            const neighborhoodElement = article
-                .find('p')
-                .first()
-
-            const addressElement = article
-                .find('p')
-                .eq(1)
-
-            const viewDetailsLinkElement = article
-                .find('a')
+            const nameElement = this.getNameElementOfRestaurant(restaurantElement)
+            const imageElement = this.getImageElementOfRestaurant(restaurantElement)
+            const neighborhoodElement = this.getNaighborhoodElementOfRestaurant(restaurantElement)
+            const addressElement = this.getAddressElementOfRestaurant(restaurantElement)
+            const viewDetailsLinkElement = this.getViewDetailsElementOfRestaurant(restaurantElement)
 
             return {
                 nameElement,
@@ -52,39 +69,46 @@ export class HomePage {
             }
     }
 
+    getNeighborhoodSelect(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.getById('neighborhoods-select')
+    }
+
+    getCuisineSelect(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.getById('cuisines-select')
+    }
+
     /* UI actions */
 
-    clickFirstMapPin(): Cypress.Chainable<MapPin> {
+    clickMapPin(index: number): Cypress.Chainable<MapPin> {
         // need this since we plan on going to a new page
         // when we click the map pin
         cy.unregisterAllServiceWorkers()
 
         return this.getMapPins()
-            .should('have.length.greaterThan', 0)
-            .first()
+            // first make sure a map pin exists at that index, otherwise fail the test
+            .should('have.length.greaterThan', index)
+            .eq(index)
             .then((mapPin) => {
-                const restaurantName = mapPin.attr('title') || ''
+                const title = mapPin.attr('title')
 
                 cy.wrap(mapPin).click()
 
-                return cy.wrap({ restaurantName })
+                return cy.wrap({ title })
             })
     }
 
-    clickFirstViewDetailsLink(): Cypress.Chainable<MapPin> {
+    clickViewDetailsLink(index: number): Cypress.Chainable<ViewDetailsLink> {
         // need this since we plan on going to a new page
-        // when we click the map pin
+        // when we click the link
         cy.unregisterAllServiceWorkers()
 
-        return this.getRestaurantArticles()
-            .should('have.length.greaterThan', 0)
-            .first()
-            .then((article) => {
-                const restaurantName = article.find('h2').text()
-                
-                cy.wrap(article)
-                    .find('a')
-                    .contains('View Details')
+        return this.getRestaurants()
+            .should('have.length.greaterThan', index)
+            .eq(index)
+            .then((restaurantElement) => {
+                const restaurantName = this.getNameOfRestaurantFromElement(restaurantElement)
+
+                cy.wrap(this.getViewDetailsElementOfRestaurant(restaurantElement))
                     .click()
 
                 return cy.wrap({ restaurantName })
@@ -92,11 +116,13 @@ export class HomePage {
     }
 
     selectNeighborhood(neighborhood: Neighborhoods) {
-        cy.getById('neighborhoods-select').select(neighborhood)
+        this.getNeighborhoodSelect()
+            .select(neighborhood)
     }
 
     selectCuisine(cuisine: Cuisines) {
-        cy.getById('cuisines-select').select(cuisine)
+        this.getCuisineSelect()
+            .select(cuisine)
     }
 
     resetFilters() {
@@ -214,7 +240,7 @@ export class HomePage {
     }
 }
 
-export interface RestaurantNamesAndCount {
+export type RestaurantNamesAndCount = {
     restaurantsCountFromAPI: number;
     restaurantNamesFromAPI: Set<string>;
 }
@@ -223,11 +249,15 @@ export type RestaurantNames = Pick<RestaurantNamesAndCount, 'restaurantNamesFrom
 
 export type RestaurantsCount = Pick<RestaurantNamesAndCount, 'restaurantsCountFromAPI'>
 
-export interface MapPin {
-    restaurantName: string;
+export type MapPin = {
+    title: string
 }
 
-export interface RestaurantArticleElements {
+export type ViewDetailsLink = {
+    restaurantName: string
+}
+
+export type ElementsOfRestaurant = {
     nameElement: JQuery<HTMLElement>;
     imageElement: JQuery<HTMLElement>;
     neighborhoodElement: JQuery<HTMLElement>;
