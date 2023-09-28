@@ -124,15 +124,15 @@ export class DetailsPage {
     }
 
     getSuccessToast(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get('toast.success.show')
+        return cy.get('.toast.success.show')
     }
 
     getInfoToast(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get('toast.show')
+        return cy.get('.toast.show')
     }
 
     getErrorToast(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get('toast.error.show')
+        return cy.get('.toast.error.show')
     }
 
     /* UI actions */

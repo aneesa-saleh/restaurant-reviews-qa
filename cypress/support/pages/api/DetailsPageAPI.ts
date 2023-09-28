@@ -15,4 +15,34 @@ export class DetailsPageAPI {
             return cy.wrap(restaurant)
         })
     }
+
+    static generateAddReviewResponse(formData: AddReviewForm): AddReviewResponse {
+        const currentDate = (new Date()).toISOString()
+
+        return {
+            restaurant_id: 500,
+            name: formData.name,
+            rating: formData.rating,
+            comments: formData.comment,
+            createdAt: currentDate,
+            updatedAt: currentDate,
+            id: 500
+        }
+    }
+}
+
+export type AddReviewForm = {
+    name: string;
+    rating: number;
+    comment: string;
+}
+
+export type AddReviewResponse = {
+    restaurant_id: number;
+    name: string;
+    rating: number;
+    comments: string;
+    createdAt: string;
+    updatedAt: string;
+    id: number;
 }
