@@ -61,25 +61,25 @@ describe('Home page', () => {
                             nameElement, imageElement, neighborhoodElement, addressElement, viewDetailsLinkElement
                         } = homePage.getElementsOfRestaurant(restaurantElement)
 
-                        expect(nameElement).to.have.lengthOf(1)
+                        expect(nameElement).to.be.visible
 
                         const restaurantName = nameElement.text()
                         const restaurant = restaurantsByName.get(restaurantName)
 
                         expect(restaurant).not.to.be.undefined
-                        expect(restaurant).not.to.be.null
+                            .and.not.to.be.null
 
-                        expect(neighborhoodElement).to.have.lengthOf(1)
-                            .and.to.have.text(restaurant.neighborhood)
+                        expect(neighborhoodElement).to.be.visible
+                        expect(neighborhoodElement).to.have.text(restaurant.neighborhood)
 
-                        expect(addressElement).to.have.lengthOf(1)
-                            .and.to.have.text(restaurant.address)
+                        expect(addressElement).to.be.visible
+                        expect(addressElement).to.have.text(restaurant.address)
 
-                        expect(viewDetailsLinkElement).to.have.lengthOf(1)
-                            .and.to.have.text('View Details')
+                        expect(viewDetailsLinkElement).to.be.visible
+                        expect(viewDetailsLinkElement).to.have.text('View Details')
 
-                        expect(imageElement).to.have.lengthOf(1)
-                        expect(imageElement.attr('data-alt'))
+                        expect(imageElement).to.be.visible
+                        expect(imageElement).attr('data-alt')
                             .to.equal(restaurant.alt)
 
                     })

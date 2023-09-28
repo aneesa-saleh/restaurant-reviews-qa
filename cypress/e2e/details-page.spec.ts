@@ -18,26 +18,26 @@ describe('Details page', () => {
                     expect(restaurant.name).to.equal(restaurantNameFromLink)
 
                     detailsPage.getRestaurantName()
-                        .should('have.length', 1)
+                        .should('be.visible')
                         .and('have.text', restaurant.name)
 
                     detailsPage.getRestaurantImage()
-                        .should('have.length', 1)
+                        .should('be.visible')
                         .and('have.attr', 'alt', restaurant.alt)
 
                     detailsPage.getRestaurantCuisine()
-                        .should('have.length', 1)
+                        .should('be.visible')
                         .and('contain.text', restaurant.cuisine_type)
 
                     detailsPage.getMap()
                         .should('be.visible')
                     
                     detailsPage.getMapPin()
-                        .should('have.length', 1)
+                        .should('be.visible')
                         .and('have.attr', 'alt', restaurant.name)
 
                     detailsPage.getRestaurantAddress()
-                        .should('have.length', 1)
+                        .should('be.visible')
                         .and('contain.text', restaurant.address)
 
                     detailsPage.getOpeningHours()
@@ -50,8 +50,10 @@ describe('Details page', () => {
                             Utils.daysOfTheWeek().forEach((day) => {
                                 expect(
                                     detailsPage.getOpeningHoursByDay(openingHours, day)
-                                ).to.have.length(1)
-                                .and.to.contain.text(restaurant.operating_hours[day])
+                                ).to.be.visible
+                                expect(
+                                    detailsPage.getOpeningHoursByDay(openingHours, day)
+                                ).to.contain.text(restaurant.operating_hours[day])
                             })
                         })
                 })
