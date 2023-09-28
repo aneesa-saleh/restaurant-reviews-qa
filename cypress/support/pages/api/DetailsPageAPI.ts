@@ -6,17 +6,27 @@ export class DetailsPageAPI {
     }
 
     interceptRestaurantDetails() {
-        cy.intercept('/restaurants/*').as('restaurantDetailsAPIRequest')
+        cy.intercept('/restaurants/*').as('restaurantDetails')
+    }
+
+    interceptAddReview(formData: AddReviewForm) {
+        const addReviewResponse = this.generateAddReviewResponse(formData)
+        cy.intercept('POST', '/reviews', addReviewResponse)
+                .as('addReview')
+    }
+
+    waitForAddReview() {
+        cy.wait('@addReview')
     }
 
     getRestaurantDetails(): Cypress.Chainable<Restaurant> {
-        return cy.wait('@restaurantDetailsAPIRequest').then((interception) => {
+        return cy.wait('@restaurantDetails').then((interception) => {
             const restaurant: Restaurant = interception.response?.body
             return cy.wrap(restaurant)
         })
     }
 
-    static generateAddReviewResponse(formData: AddReviewForm): AddReviewResponse {
+    generateAddReviewResponse(formData: AddReviewForm): AddReviewResponse {
         const currentDate = (new Date()).toISOString()
 
         return {

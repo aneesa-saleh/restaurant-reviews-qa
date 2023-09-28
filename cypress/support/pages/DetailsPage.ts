@@ -55,6 +55,10 @@ export class DetailsPage {
         return cy.getById('add-review-button')
     }
 
+    getModal(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.getByClass('overlay')
+    }
+
     getModalTitle(): Cypress.Chainable<JQuery<HTMLElement>> {
         return cy.getById('add-review-overlay-heading')
     }

@@ -63,22 +63,19 @@ describe('Details page', () => {
 
     describe('adding a review', () => {
 
-        it.only('saves a review successfully to API when user is online', () => {
-            const formData: AddReviewForm = {
-                name: 'Aneesa',
-                rating: 4,
-                comment: 'Splendid'
-            }
+        it('saves a review successfully to API when user is online', () => {
+            homePage.clickViewDetailsLink(0).then(({ detailsPage, restaurantName }) => {
+                const formData: AddReviewForm = {
+                    name: 'Aneesa',
+                    rating: 4,
+                    comment: 'Splendid'
+                }
 
-            const addReviewResponse = DetailsPageAPI.generateAddReviewResponse(formData)
-
-            cy.intercept('POST', '/reviews', addReviewResponse)
-                .as('submitReview')
-
-            homePage.clickViewDetailsLink(0).then(({ detailsPage }) => {
+                detailsPage.API.interceptAddReview(formData)
 
                 detailsPage.clickAddReviewButton()
-                cy.getByClass('overlay').should('be.visible')
+                detailsPage.getModal().should('be.visible')
+                detailsPage.getModalTitle().should('contain.text', restaurantName)
 
                 detailsPage.typeName(formData.name)
                 detailsPage.chooseRating(formData.rating)
@@ -86,22 +83,19 @@ describe('Details page', () => {
  
                 detailsPage.clickSubmitReviewButton()
 
-                cy.wait('@submitReview')
+                detailsPage.API.waitForAddReview()
 
-                cy.getByClass('overlay').should('not.be.visible')
+                detailsPage.getModal().should('not.be.visible')
 
                 detailsPage.getSuccessToast()
                     .should('be.visible')
 
-                cy.getByClass('review').first().then((newReview) => {
-                    expect(newReview.find('.review-name'))
-                        .to.contain.text(formData.name)
-                    expect(newReview.find('.review-rating'))
-                        .to.contain.text(`${formData.rating}`)
-                    expect(newReview.find('p').last())
-                        .to.contain.text(formData.comment)
-                    expect(newReview.find('.review-date'))
-                        .not.to.be.empty
+                detailsPage.getMostRecentReview().then((newReview) => {
+                    const newReviewElements = detailsPage.getReviewElements(newReview)
+                    expect(newReviewElements.reviewerName).to.contain.text(formData.name)
+                    expect(newReviewElements.rating).to.contain.text(`${formData.rating}`)
+                    expect(newReviewElements.comment).to.contain.text(formData.comment)
+                    expect(newReviewElements.date).not.to.be.empty
                 })
             })
         })
