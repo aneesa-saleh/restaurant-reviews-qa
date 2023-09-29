@@ -1,4 +1,4 @@
-import { Restaurant } from "../support/models/restaurant"
+import { Restaurant } from "../pages/models/restaurant"
 import { HomePage } from "../pages/HomePage"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
 import { RestaurantNamesAndCount } from "../pages/api/HomePageAPI"
