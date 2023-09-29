@@ -1,4 +1,4 @@
-import { Restaurant } from "../../models/restaurant"
+import { Restaurant } from "../../support/models/restaurant"
 
 export class HomePageAPI {
     constructor() {

@@ -1,8 +1,7 @@
 import { Utils } from "../support/common/Utils"
-import { DaysOfTheWeek } from "../support/common/constants"
 import { Restaurant } from "../support/models/restaurant"
-import { HomePage } from "../support/pages/HomePage"
-import { AddReviewForm, DetailsPageAPI } from "../support/pages/api/DetailsPageAPI"
+import { HomePage } from "../pages/HomePage"
+import { AddReviewForm } from "../pages/api/DetailsPageAPI"
 
 describe('Details page', () => {
 

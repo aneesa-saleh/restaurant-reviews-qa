@@ -1,4 +1,4 @@
-import { DaysOfTheWeek } from "../common/constants";
+import { DaysOfTheWeek } from "../support/common/constants";
 import { DetailsPageAPI } from "./api/DetailsPageAPI";
 
 export class DetailsPage {
