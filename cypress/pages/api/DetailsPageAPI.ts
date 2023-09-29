@@ -1,4 +1,5 @@
 import { Restaurant } from "../models/restaurant"
+import { Review } from "../models/review"
 
 export class DetailsPageAPI {
     constructor() {
@@ -10,7 +11,7 @@ export class DetailsPageAPI {
     }
 
     interceptAddReview(formData: AddReviewForm) {
-        const addReviewResponse = this.generateAddReviewResponse(formData)
+        const addReviewResponse: Review = this.generateAddReviewResponse(formData)
         cy.intercept('POST', '/reviews', addReviewResponse)
                 .as('addReview')
     }
@@ -26,7 +27,7 @@ export class DetailsPageAPI {
         })
     }
 
-    generateAddReviewResponse(formData: AddReviewForm): AddReviewResponse {
+    generateAddReviewResponse(formData: AddReviewForm): Review {
         const currentDate = (new Date()).toISOString()
 
         return {
@@ -45,14 +46,4 @@ export type AddReviewForm = {
     name: string;
     rating: number;
     comment: string;
-}
-
-export type AddReviewResponse = {
-    restaurant_id: number;
-    name: string;
-    rating: number;
-    comments: string;
-    createdAt: string;
-    updatedAt: string;
-    id: number;
 }
