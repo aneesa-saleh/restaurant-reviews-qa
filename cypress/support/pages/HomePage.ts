@@ -95,6 +95,7 @@ export class HomePage {
             .eq(index)
             .then((mapPin) => {
                 const title = mapPin.attr('title')
+                // instantiate details page before clicking to set up intercepts
                 const detailsPage = new DetailsPage()
 
                 cy.wrap(mapPin).click();
@@ -113,6 +114,7 @@ export class HomePage {
             .eq(index)
             .then((restaurantElement) => {
                 const restaurantName = this.getNameOfRestaurantFromElement(restaurantElement)
+                // instantiate details page before clicking to set up intercepts
                 const detailsPage = new DetailsPage()
 
                 cy.wrap(this.getViewDetailsElementOfRestaurant(restaurantElement))
