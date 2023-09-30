@@ -16,7 +16,7 @@ The project has 4 main components:
 ### User stories
 User stories are saved in pdf files exported from [JIRA](https://www.atlassian.com/software/jira). There is a detailed list of user stories including acceptance criteria [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-details.pdf). Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/user-stories/user-stories-summary.pdf) for a summarised version of the list. See below for a mind map of features and functionalities.
 
-![Features and functionalities mind map](https://raw.githubusercontent.com/aneesa-saleh/restaurant-reviews-qa/master/docs/user-stories/Features%20and%20functionalities%20mind%20map.jpg)
+![Features and functionalities mind map](https://raw.githubusercontent.com/aneesa-saleh/restaurant-reviews-qa/master/docs/Features%20and%20functionalities%20mind%20map.jpg)
 
 <p align=center>Mind map of features and functionalities</p>
 
