@@ -77,10 +77,4 @@ Cypress.Commands.add('goOnline', () => {
         uploadThroughput: -1,
       },
     })
-    .then(() => {
-        return Cypress.automation('remote:debugger:protocol',
-            {
-            command: 'Network.disable',
-            })
-    })
 })

@@ -85,10 +85,6 @@ export class HomePage {
 
     /* UI actions */
     clickMapPin(index: number): Cypress.Chainable<MapPin> {
-        // need this since we plan on going to a new page
-        // when we click the map pin
-        cy.unregisterAllServiceWorkers();
-
         return this.getMapPins()
             // first make sure a map pin exists at that index, otherwise fail the test
             .should('have.length.greaterThan', index)
@@ -105,10 +101,6 @@ export class HomePage {
     }
 
     clickViewDetailsLink(index: number): Cypress.Chainable<ViewDetailsLink> {
-        // need this since we plan on going to a new page
-        // when we click the link
-        cy.unregisterAllServiceWorkers();
-
         return this.getRestaurants()
             .should('have.length.greaterThan', index)
             .eq(index)
