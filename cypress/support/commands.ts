@@ -4,6 +4,9 @@ declare namespace Cypress {
         getByClass(className: string): Chainable<JQuery<HTMLElement>>
         
         unregisterAllServiceWorkers(): void
+
+        goOffline(): Bluebird.Promise<any>
+        goOnline(): Bluebird.Promise<any>
     }
 }
 
@@ -23,7 +26,6 @@ Cypress.Commands.add('unregisterAllServiceWorkers', () => {
                 
                 Cypress.log({
                     name: 'unregisterAllServiceWorkers',
-                    // shorter name for the Command Log
                     displayName: 'Service Worker',
                     message: `Unregistering: ${registration?.active?.scriptURL}`
                 })
@@ -32,4 +34,53 @@ Cypress.Commands.add('unregisterAllServiceWorkers', () => {
             })
         })
     }
+})
+
+Cypress.Commands.add('goOffline', () => {
+    Cypress.log({
+        name: 'goOffline',
+        displayName: 'Network',
+        message: 'Going offline'
+    })
+
+    // https://chromedevtools.github.io/devtools-protocol/1-3/Network/#method-emulateNetworkConditions
+    return Cypress.automation('remote:debugger:protocol', { command: 'Network.enable' })
+        .then(() => {
+            return Cypress.automation('remote:debugger:protocol',
+            {
+                command: 'Network.emulateNetworkConditions',
+                params: {
+                offline: true,
+                latency: -1,
+                downloadThroughput: -1,
+                uploadThroughput: -1,
+                },
+            })
+        })
+})
+
+Cypress.Commands.add('goOnline', () => {
+    Cypress.log({
+        name: 'goOnline',
+        displayName: 'Network',
+        message: 'Going back online'
+    })
+
+    // https://chromedevtools.github.io/devtools-protocol/1-3/Network/#method-emulateNetworkConditions
+    return Cypress.automation('remote:debugger:protocol',
+    {
+      command: 'Network.emulateNetworkConditions',
+      params: {
+        offline: false,
+        latency: -1,
+        downloadThroughput: -1,
+        uploadThroughput: -1,
+      },
+    })
+    .then(() => {
+        return Cypress.automation('remote:debugger:protocol',
+            {
+            command: 'Network.disable',
+            })
+    })
 })

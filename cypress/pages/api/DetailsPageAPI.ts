@@ -10,14 +10,26 @@ export class DetailsPageAPI {
         cy.intercept('/restaurants/*').as('restaurantDetails')
     }
 
-    interceptAddReview(formData: AddReviewForm) {
+    interceptAndStubAddReview(formData: AddReviewForm) {
         const addReviewResponse: Review = this.generateAddReviewResponse(formData)
         cy.intercept('POST', '/reviews', addReviewResponse)
                 .as('addReview')
     }
 
+    waitForAddRestaurantDetails() {
+        cy.wait('@restaurantDetails')
+    }
+
     waitForAddReview() {
         cy.wait('@addReview')
+    }
+
+    getRestaurantDetailsRequest() {
+        return cy.get('@restaurantDetails')
+    }
+
+    getAddReviewRequest() {
+        return cy.get('@addReview')
     }
 
     getRestaurantDetails(): Cypress.Chainable<Restaurant> {

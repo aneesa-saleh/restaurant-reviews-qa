@@ -2,6 +2,7 @@ import { Utils } from "../support/common/Utils"
 import { Restaurant } from "../pages/models/restaurant"
 import { HomePage } from "../pages/HomePage"
 import { AddReviewForm } from "../pages/api/DetailsPageAPI"
+import { DetailsPage } from "../pages/DetailsPage"
 
 describe('Details page', () => {
 
@@ -61,16 +62,21 @@ describe('Details page', () => {
     })
 
     describe('adding a review', () => {
+        const formData: AddReviewForm = {
+            name: 'Aneesa',
+            rating: 4,
+            comment: 'Splendid'
+        }
+
+        afterEach(() => {
+            cy.goOnline()
+        })
 
         it('saves a review successfully to API when user is online', () => {
             homePage.clickViewDetailsLink(0).then(({ detailsPage, restaurantName }) => {
-                const formData: AddReviewForm = {
-                    name: 'Aneesa',
-                    rating: 4,
-                    comment: 'Splendid'
-                }
+                
 
-                detailsPage.API.interceptAddReview(formData)
+                detailsPage.API.interceptAndStubAddReview(formData)
 
                 detailsPage.clickAddReviewButton()
                 detailsPage.getModal().should('be.visible')
@@ -96,9 +102,45 @@ describe('Details page', () => {
                     expect(newReviewElements.comment).to.contain.text(formData.comment)
                     expect(newReviewElements.date).not.to.be.empty
                 })
+
+                detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                    expect(interceptedRequest).not.to.be.null
+                })
             })
         })
 
-        it('saves review locally when the user is offline')
+        it('does not submit review when offline and no service worker controlling the page', () => {
+            homePage.clickViewDetailsLink(0).then(({ detailsPage }) => {
+                // service worker isn't expected to be active since we disabled it before
+                // navigating to the details page
+                // no point executing this test if it isn't
+                expect(navigator.serviceWorker.controller).to.be.null
+
+                cy.goOffline().then(() => {
+                    detailsPage.getErrorToast().should('be.visible')
+                        .and('contain.text', 'You are offline')
+                    detailsPage.closeToast()
+    
+                    detailsPage.API.interceptAndStubAddReview(formData)
+    
+                    detailsPage.clickAddReviewButton()
+                    detailsPage.getModal().should('be.visible')
+    
+                    detailsPage.typeName(formData.name)
+                    detailsPage.chooseRating(formData.rating)
+                    detailsPage.typeComment(formData.comment)
+     
+                    detailsPage.clickSubmitReviewButton()
+
+                    detailsPage.getErrorToast().should('be.visible')
+                        .and('contain.text', 'An error occurred. Please try again')
+                    detailsPage.getModal().should('be.visible')
+    
+                    detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                        expect(interceptedRequest).to.be.null
+                    })
+                })
+            })
+        })
     })
 })

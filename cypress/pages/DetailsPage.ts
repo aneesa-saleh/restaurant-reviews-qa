@@ -139,6 +139,10 @@ export class DetailsPage {
         return cy.get('.toast.error.show')
     }
 
+    getCloseToastButton(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get('.close-toast')
+    }
+
     /* UI actions */
 
     clickAddReviewButton() {
@@ -165,6 +169,10 @@ export class DetailsPage {
 
     clickCancelButton() {
         this.getCancelButton().click()
+    }
+
+    closeToast() {
+        this.getCloseToastButton().click()
     }
 
 }
