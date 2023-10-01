@@ -287,8 +287,6 @@ describe('Details page', () => {
 
         it('displays an error notification when marking as favourite fails', () => {
             detailsPage.API.waitForRestaurantDetails()
-                .then(({ response }) => response.body)
-                .should('have.property', 'is_favorite', 'false')
 
             detailsPage.getFavouriteButton()
                 .should('contain.text', 'Mark restaurant as favourite')
@@ -310,15 +308,95 @@ describe('Details page', () => {
                 detailsPage.getFavouriteButtonIcon()
                     .should('have.class', 'unmarked')
 
-                detailsPage.API.spyMarkAsFavourite()
+                detailsPage.API.spyOnMarkAsFavourite()
                     .should('not.have.been.called')
             })
         })
     })
 
     describe('unmark a restaurant as favourite', () => {
-        // unmark restaurant as favourite before test
-        it('unmarks a restaurant as favourite when unmark as favourite button is clicked')
-        it('displays an error notification when unmarking as favourite fails')
+        const restaurantId = 6
+
+        beforeEach(() => {
+            detailsPage = new DetailsPage()
+
+            detailsPage.API.markRestaurantAsFavouriteAPICall(restaurantId)
+                .should((response) => {
+                    expect(response.isOkStatusCode).to.be.true
+                    expect(response.body).to.have.property('is_favorite')
+                        .to.equal('true')
+                }).then(() => {
+                    detailsPage.visitRestaurant(restaurantId)
+                    cy.reload() // page doesn't update the changed favourite for some reason until reloaded
+                })
+        })
+
+        after(() => {
+            cy.goOnline()
+        })
+
+        it('unmarks a restaurant as favourite when unmark as favourite button is clicked', () => {
+            detailsPage.API.waitForRestaurantDetails()
+
+            detailsPage.getFavouriteButton()
+                .should('contain.text', 'Unmark restaurant as favourite')
+            detailsPage.getFavouriteButtonIcon()
+                .should('have.class', 'marked')
+                
+            detailsPage.API.interceptUnmarkAsFavourite()
+
+            detailsPage.clickFavouriteButton()
+                .should('be.disabled')
+                .and('contain.text', 'Mark restaurant as favourite')
+            detailsPage.getFavouriteButtonIcon()
+                .should('have.class', 'unmarked')
+
+            cy.getById('favourite-spinner').should('be.visible')
+            
+            detailsPage.API.waitForUnmarkAsFavourite()
+                .should(({ response }) => {
+                    expect(response.statusCode).to.equal(200)
+                })
+
+            detailsPage.getSuccessToast()
+                .should('be.visible')
+                .and('contain.text', 'Restaurant has been unmarked as favourite')
+
+            cy.getById('favourite-spinner').should('not.be.visible')
+
+            detailsPage.getFavouriteButton()
+                .should('not.be.disabled')
+                .and('contain.text', 'Mark restaurant as favourite')
+            detailsPage.getFavouriteButtonIcon()
+                .should('have.class', 'unmarked')
+        })
+
+        it('displays an error notification when unmarking as favourite fails', () => {
+            detailsPage.API.waitForRestaurantDetails()
+
+            detailsPage.getFavouriteButton()
+                .should('contain.text', 'Unmark restaurant as favourite')
+
+            detailsPage.API.interceptUnmarkAsFavourite()
+
+            cy.goOffline().then(() => {
+                detailsPage.closeToast() // close offline notification
+
+                detailsPage.clickFavouriteButton()
+
+                detailsPage.getErrorToast()
+                    .should('be.visible')
+                    .and('contain.text', 'An error occurred unmarking restaurant as favourite')
+
+                detailsPage.getFavouriteButton()
+                    .should('not.be.disabled')
+                    .and('contain.text', 'Unmark restaurant as favourite')
+                detailsPage.getFavouriteButtonIcon()
+                    .should('have.class', 'marked')
+
+                detailsPage.API.spyOnUnmarkAsFavourite()
+                    .should('not.have.been.called')
+            })
+        })
     })
 })

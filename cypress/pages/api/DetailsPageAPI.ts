@@ -33,6 +33,11 @@ export class DetailsPageAPI {
             .as('markAsFavourite')
     }
 
+    interceptUnmarkAsFavourite() {
+        return cy.intercept('/restaurants/*/?is_favorite=false', cy.spy().as('unmarkAsFavouriteSpy'))
+            .as('unmarkAsFavourite')
+    }
+
     interceptRestaurantDetails() {
         cy.intercept('/restaurants/*').as('restaurantDetails')
     }
@@ -70,6 +75,10 @@ export class DetailsPageAPI {
         return cy.wait('@markAsFavourite')
     }
 
+    waitForUnmarkAsFavourite() {
+        return cy.wait('@unmarkAsFavourite')
+    }
+
     getRestaurantDetails(): Cypress.Chainable<Restaurant> {
         return this.waitForRestaurantDetails().then((interception: any) => {
             const restaurant: Restaurant = interception.response?.body
@@ -85,10 +94,13 @@ export class DetailsPageAPI {
         return cy.get('@reviewsSpy')
     }
 
-    spyMarkAsFavourite() {
+    spyOnMarkAsFavourite() {
         return cy.get('@markAsFavouriteSpy')
     }
     
+    spyOnUnmarkAsFavourite() {
+        return cy.get('@unmarkAsFavouriteSpy')
+    }
 
     getAddReview() {
         return cy.get('@addReview')
