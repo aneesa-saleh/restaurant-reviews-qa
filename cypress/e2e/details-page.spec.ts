@@ -68,10 +68,6 @@ describe('Details page', () => {
             comment: 'Splendid'
         }
 
-        afterEach(() => {
-            cy.goOnline()
-        })
-
         it('saves a review successfully to API when user is online', () => {
             homePage.clickViewDetailsLink(0).then(({ detailsPage, restaurantName }) => {
                 
@@ -109,40 +105,47 @@ describe('Details page', () => {
             })
         })
 
-        it('does not submit review when offline and no service worker controlling the page', () => {
-            homePage.clickViewDetailsLink(0).then(({ detailsPage }) => {
-                // service worker isn't expected to be active since we disabled it before
-                // navigating to the details page
-                // no point executing this test if it isn't
-                if (navigator.serviceWorker.controller !== null) {
-                    console.log(navigator.serviceWorker.controller)
-                }
+        describe('when user is offline (no service worker controlling the page)', () => {
+            // this test needs a separate describe block because of the cleanup
+            // required (going back online), which won't happen if the test fails
+            // for any reason, causing all subsequents test to fail since it can't
+            // connect to cypress
 
-                cy.goOffline().then(() => {
-                    detailsPage.getErrorToast().should('be.visible')
-                        .and('contain.text', 'You are offline')
-                    detailsPage.closeToast()
-    
-                    detailsPage.API.interceptAndStubAddReview(formData)
-    
-                    detailsPage.clickAddReviewButton()
-                    detailsPage.getModal().should('be.visible')
-    
-                    detailsPage.typeName(formData.name)
-                    detailsPage.chooseRating(formData.rating)
-                    detailsPage.typeComment(formData.comment)
-     
-                    detailsPage.clickSubmitReviewButton()
+            after(() => {
+                cy.goOnline()
+            })
 
-                    detailsPage.getErrorToast().should('be.visible')
-                        .and('contain.text', 'An error occurred. Please try again')
-                    detailsPage.getModal().should('be.visible')
+            it('does not submit review', () => {
+                homePage.clickViewDetailsLink(0).then(({ detailsPage }) => {
+                    // service workers are disabled during [automated] test mode
     
-                    detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
-                        expect(interceptedRequest).to.be.null
+                    cy.goOffline().then(() => {
+                        detailsPage.getErrorToast().should('be.visible')
+                            .and('contain.text', 'You are offline')
+                        detailsPage.closeToast()
+        
+                        detailsPage.API.interceptAndStubAddReview(formData)
+        
+                        detailsPage.clickAddReviewButton()
+                        detailsPage.getModal().should('be.visible')
+        
+                        detailsPage.typeName(formData.name)
+                        detailsPage.chooseRating(formData.rating)
+                        detailsPage.typeComment(formData.comment)
+         
+                        detailsPage.clickSubmitReviewButton()
+    
+                        detailsPage.getErrorToast().should('be.visible')
+                            .and('contain.text', 'An error occurred. Please try again')
+                        detailsPage.getModal().should('be.visible')
+        
+                        detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                            expect(interceptedRequest).to.be.null
+                        })
                     })
                 })
             })
         })
+
     })
 })
