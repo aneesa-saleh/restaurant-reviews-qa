@@ -239,8 +239,14 @@ describe('Details page', () => {
                     expect(response.isOkStatusCode).to.be.true
                     expect(response.body).to.have.property('is_favorite')
                         .to.equal('false')
+                }).then(() => {
+                    detailsPage.visitRestaurant(restaurantId)
+                    cy.reload() // page doesn't update the changed favourite for some reason until reloaded
                 })
-            detailsPage.visitRestaurant(restaurantId)
+        })
+
+        after(() => {
+            cy.goOnline()
         })
 
         // unmark restaurant as favourite before test
@@ -268,6 +274,10 @@ describe('Details page', () => {
                     expect(response.statusCode).to.equal(200)
                 })
 
+            detailsPage.getSuccessToast()
+                .should('be.visible')
+                .and('contain.text', 'Restaurant has been marked as favourite')
+
             cy.getById('favourite-spinner').should('not.be.visible')
 
             cy.getById('mark-as-favourite')
@@ -276,7 +286,32 @@ describe('Details page', () => {
                 .find('i.fa-star').should('have.class', 'marked')
         })
 
-        it('displays an error notification when marking as favourite fails')
+        it('displays an error notification when marking as favourite fails', () => {
+            detailsPage.API.waitForRestaurantDetails()
+                .then(({ response }) => response.body)
+                .should('have.property', 'is_favorite', 'false')
+
+            cy.getById('mark-as-favourite')
+                .should('contain.text', 'Mark restaurant as favourite')
+
+            detailsPage.API.interceptMarkAsFavourite()
+
+            cy.goOffline().then(() => {
+                detailsPage.closeToast() // close offline notification
+
+                cy.getById('mark-as-favourite')
+                    .click()
+
+                    detailsPage.getErrorToast()
+                        .should('be.visible')
+                        .and('contain.text', 'An error occurred marking restaurant as favourite')
+
+                cy.getById('mark-as-favourite')
+                    .should('not.be.disabled')
+                    .and('contain.text', 'Mark restaurant as favourite')
+                    .find('i.fa-star').should('have.class', 'unmarked')
+            })
+        })
     })
 
     describe('unmark a restaurant as favourite', () => {

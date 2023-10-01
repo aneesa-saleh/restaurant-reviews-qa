@@ -29,7 +29,8 @@ export class DetailsPageAPI {
     }
 
     interceptMarkAsFavourite() {
-        return cy.intercept('/restaurants/*/?is_favorite=true').as('markAsFavourite')
+        return cy.intercept('/restaurants/*/?is_favorite=true', cy.spy().as('markAsFavouriteSpy'))
+            .as('markAsFavourite')
     }
 
     interceptRestaurantDetails() {
@@ -82,6 +83,10 @@ export class DetailsPageAPI {
 
     spyOnReviews() {
         return cy.get('@reviewsSpy')
+    }
+
+    spyMarkAsFavourite() {
+        return cy.get('@markAsFavouriteSpy')
     }
     
 
