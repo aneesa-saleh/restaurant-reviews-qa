@@ -10,10 +10,9 @@ export class HomePage {
 
     constructor() {
         this.API = new HomePageAPI()
-        this.visit()
     }
 
-    private visit() {
+    visit() {
         cy.visit('/');
     }
 

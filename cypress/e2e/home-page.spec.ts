@@ -9,6 +9,7 @@ describe('Home page', () => {
 
     beforeEach(() => {
         homePage = new HomePage()
+        homePage.visit()
     })
 
     describe('restaurants map', () => {
