@@ -67,13 +67,13 @@ export class DetailsPageAPI {
         const currentDate = (new Date()).toISOString()
 
         return {
-            restaurant_id: 500,
+            restaurant_id: 1,
             name: formData.name,
             rating: formData.rating,
             comments: formData.comment,
             createdAt: currentDate,
             updatedAt: currentDate,
-            id: 500
+            id: 1
         }
     }
 }

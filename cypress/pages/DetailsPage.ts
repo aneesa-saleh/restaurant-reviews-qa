@@ -16,6 +16,9 @@ export class DetailsPage {
     }
 
     visitRestaurant(restaurantId: number) {
+        if (restaurantId < 1 || restaurantId > 10)
+            throw new RangeError('Restaurant ID should be from 1 to 10 (inclusive)')
+        
         cy.visit(`/restaurant.html?id=${restaurantId}`)
     }
 

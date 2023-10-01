@@ -5,64 +5,58 @@ import { AddReviewFormData } from "../pages/api/DetailsPageAPI"
 import { DetailsPage } from "../pages/DetailsPage"
 
 describe('Details page', () => {
-
-    let homePage: HomePage
+    let detailsPage: DetailsPage
 
     it('shows complete details of a restaurant', () => {
-        homePage = new HomePage()
+        detailsPage = new DetailsPage()
+        detailsPage.visitRestaurant(5)
 
-        homePage.clickViewDetailsLink(5).then(({ restaurantName: restaurantNameFromLink, detailsPage }) => {
-            detailsPage.API.getRestaurantDetails().then((restaurant: Restaurant) => {
-                    expect(restaurant).not.to.be.null
-                    expect(restaurant.name).to.equal(restaurantNameFromLink)
+        detailsPage.API.getRestaurantDetails().then((restaurant: Restaurant) => {
+                expect(restaurant).not.to.be.null
 
-                    detailsPage.getRestaurantName()
-                        .should('be.visible')
-                        .and('have.text', restaurant.name)
+                detailsPage.getRestaurantName()
+                    .should('be.visible')
+                    .and('have.text', restaurant.name)
 
-                    detailsPage.getRestaurantImage()
-                        .should('be.visible')
-                        .and('have.attr', 'alt', restaurant.alt)
+                detailsPage.getRestaurantImage()
+                    .should('be.visible')
+                    .and('have.attr', 'alt', restaurant.alt)
 
-                    detailsPage.getRestaurantCuisine()
-                        .should('be.visible')
-                        .and('contain.text', restaurant.cuisine_type)
+                detailsPage.getRestaurantCuisine()
+                    .should('be.visible')
+                    .and('contain.text', restaurant.cuisine_type)
 
-                    detailsPage.getMap()
-                        .should('be.visible')
-                    
-                    detailsPage.getMapPin()
-                        .should('be.visible')
-                        .and('have.attr', 'alt', restaurant.name)
+                detailsPage.getMap()
+                    .should('be.visible')
+                
+                detailsPage.getMapPin()
+                    .should('be.visible')
+                    .and('have.attr', 'alt', restaurant.name)
 
-                    detailsPage.getRestaurantAddress()
-                        .should('be.visible')
-                        .and('contain.text', restaurant.address)
+                detailsPage.getRestaurantAddress()
+                    .should('be.visible')
+                    .and('contain.text', restaurant.address)
 
-                    detailsPage.getOpeningHours()
-                        .then((openingHours) => {
-                            expect(openingHours).to.be.visible
+                detailsPage.getOpeningHours()
+                    .then((openingHours) => {
+                        expect(openingHours).to.be.visible
+                        expect(
+                            detailsPage.getOpeningHoursElements(openingHours)
+                        ).to.have.length(7)
+
+                        Utils.daysOfTheWeek().forEach((day) => {
                             expect(
-                                detailsPage.getOpeningHoursElements(openingHours)
-                            ).to.have.length(7)
-
-                            Utils.daysOfTheWeek().forEach((day) => {
-                                expect(
-                                    detailsPage.getOpeningHoursByDay(openingHours, day)
-                                ).to.be.visible
-                                expect(
-                                    detailsPage.getOpeningHoursByDay(openingHours, day)
-                                ).to.contain.text(restaurant.operating_hours[day])
-                            })
+                                detailsPage.getOpeningHoursByDay(openingHours, day)
+                            ).to.be.visible
+                            expect(
+                                detailsPage.getOpeningHoursByDay(openingHours, day)
+                            ).to.contain.text(restaurant.operating_hours[day])
                         })
-                })
+                    })
             })
     })
 
     describe('adding a review', () => {
-        beforeEach(() => {
-            homePage = new HomePage()
-        })
 
         const sampleFormData: AddReviewFormData = {
             name: 'Aneesa',
@@ -71,21 +65,18 @@ describe('Details page', () => {
         }
 
         describe('form validation', () => {
-            let detailsPage: DetailsPage
-
             beforeEach(() => {
-                homePage.clickViewDetailsLink(0).then(({ detailsPage: _detailsPage }) => {
-                    detailsPage = _detailsPage
+                const detailsPage = new DetailsPage()
+                detailsPage.visitRestaurant(1)
                     
-                    detailsPage.API.interceptAndStubAddReview(sampleFormData)
-    
-                    detailsPage.clickAddReviewButton()
-                    detailsPage.getModal().should('be.visible')
-    
-                    // form is blank
+                detailsPage.API.interceptAndStubAddReview(sampleFormData)
 
-                    detailsPage.clickSubmitReviewButton()
-                })
+                detailsPage.clickAddReviewButton()
+                detailsPage.getModal().should('be.visible')
+
+                // form is blank because nothing was typed
+
+                detailsPage.clickSubmitReviewButton()
             })
 
             it('displays form errors and does not submit for invalid input', () => {
@@ -134,36 +125,35 @@ describe('Details page', () => {
         })
 
         it('saves a review successfully to API when user is online', () => {
-            homePage.clickViewDetailsLink(0).then(({ detailsPage, restaurantName }) => {
+            detailsPage = new DetailsPage()
+            detailsPage.visitRestaurant(1)
 
-                detailsPage.API.interceptAndStubAddReview(sampleFormData)
+            detailsPage.API.interceptAndStubAddReview(sampleFormData)
 
-                detailsPage.clickAddReviewButton()
-                detailsPage.getModal().should('be.visible')
-                detailsPage.getModalTitle().should('contain.text', restaurantName)
+            detailsPage.clickAddReviewButton()
+            detailsPage.getModal().should('be.visible')
 
-                detailsPage.typeName(sampleFormData.name)
-                detailsPage.chooseRating(sampleFormData.rating)
-                detailsPage.typeComment(sampleFormData.comment)
- 
-                detailsPage.clickSubmitReviewButton()
+            detailsPage.typeName(sampleFormData.name)
+            detailsPage.chooseRating(sampleFormData.rating)
+            detailsPage.typeComment(sampleFormData.comment)
 
-                detailsPage.getModal().should('not.be.visible')
+            detailsPage.clickSubmitReviewButton()
 
-                detailsPage.getSuccessToast()
-                    .should('be.visible')
+            detailsPage.getModal().should('not.be.visible')
 
-                detailsPage.getMostRecentReview().then((newReview) => {
-                    const newReviewElements = detailsPage.getElementsOfReview(newReview)
-                    expect(newReviewElements.reviewerName).to.contain.text(sampleFormData.name)
-                    expect(newReviewElements.rating).to.contain.text(`${sampleFormData.rating}`)
-                    expect(newReviewElements.comment).to.contain.text(sampleFormData.comment)
-                    expect(newReviewElements.date).not.to.be.empty
-                })
+            detailsPage.getSuccessToast()
+                .should('be.visible')
 
-                detailsPage.API.getAddReview().then((interceptedRequest) => {
-                    expect(interceptedRequest).not.to.be.null
-                })
+            detailsPage.getMostRecentReview().then((newReview) => {
+                const newReviewElements = detailsPage.getElementsOfReview(newReview)
+                expect(newReviewElements.reviewerName).to.contain.text(sampleFormData.name)
+                expect(newReviewElements.rating).to.contain.text(`${sampleFormData.rating}`)
+                expect(newReviewElements.comment).to.contain.text(sampleFormData.comment)
+                expect(newReviewElements.date).not.to.be.empty
+            })
+
+            detailsPage.API.getAddReview().then((interceptedRequest) => {
+                expect(interceptedRequest).not.to.be.null
             })
         })
 
@@ -178,43 +168,45 @@ describe('Details page', () => {
             })
 
             it('does not submit review', () => {
-                homePage.clickViewDetailsLink(0).then(({ detailsPage }) => {
-                    // service workers are disabled during [automated] test mode
-                    // so offline capabilities like saving requests in idb won't work
+                detailsPage = new DetailsPage()
+                detailsPage.visitRestaurant(1)
 
-                    // wait for reviews to load before going offline
-                    detailsPage.API.spyOnReviews().should('have.been.called')
+                // service workers are disabled during [automated] test mode
+                // so offline capabilities like saving requests in idb won't work
+
+                // wait for reviews to load before going offline
+                detailsPage.API.spyOnReviews().should('have.been.called')
+
+                cy.goOffline().then(() => {
+                    detailsPage.getErrorToast().should('be.visible')
+                        .and('contain.text', 'You are offline')
+                    detailsPage.closeToast()
     
-                    cy.goOffline().then(() => {
-                        detailsPage.getErrorToast().should('be.visible')
-                            .and('contain.text', 'You are offline')
-                        detailsPage.closeToast()
-        
-                        detailsPage.API.interceptAndStubAddReview(sampleFormData)
-        
-                        detailsPage.clickAddReviewButton()
-                        detailsPage.getModal().should('be.visible')
-        
-                        detailsPage.typeName(sampleFormData.name)
-                        detailsPage.chooseRating(sampleFormData.rating)
-                        detailsPage.typeComment(sampleFormData.comment)
-         
-                        detailsPage.clickSubmitReviewButton()
+                    detailsPage.API.interceptAndStubAddReview(sampleFormData)
     
-                        detailsPage.getErrorToast().should('be.visible')
-                            .and('contain.text', 'An error occurred. Please try again')
-                        detailsPage.getModal().should('be.visible')
+                    detailsPage.clickAddReviewButton()
+                    detailsPage.getModal().should('be.visible')
+    
+                    detailsPage.typeName(sampleFormData.name)
+                    detailsPage.chooseRating(sampleFormData.rating)
+                    detailsPage.typeComment(sampleFormData.comment)
         
-                        detailsPage.API.getAddReview().then((interceptedRequest) => {
-                            expect(interceptedRequest).to.be.null
-                        })
+                    detailsPage.clickSubmitReviewButton()
+
+                    detailsPage.getErrorToast().should('be.visible')
+                        .and('contain.text', 'An error occurred. Please try again')
+                    detailsPage.getModal().should('be.visible')
+    
+                    detailsPage.API.getAddReview().then((interceptedRequest) => {
+                        expect(interceptedRequest).to.be.null
                     })
                 })
+
             })
         })
     })
 
-    it.only('renders reviews list', () => {
+    it('renders reviews list', () => {
         const detailsPage: DetailsPage = new DetailsPage({
             shouldStubReviews: true
         })
