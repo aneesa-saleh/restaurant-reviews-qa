@@ -228,7 +228,7 @@ describe('Details page', () => {
         })
     })
 
-    describe.only('mark a restaurant as favourite', () => {
+    describe('mark a restaurant as favourite', () => {
         const restaurantId = 3
 
         beforeEach(() => {
@@ -249,23 +249,21 @@ describe('Details page', () => {
             cy.goOnline()
         })
 
-        // unmark restaurant as favourite before test
         it('marks a restaurant as favourite when mark as favourite button is clicked', () => {
             detailsPage.API.waitForRestaurantDetails()
-                .then(({ response }) => response.body)
-                .should('have.property', 'is_favorite', 'false')
 
-            cy.getById('mark-as-favourite')
+            detailsPage.getFavouriteButton()
                 .should('contain.text', 'Mark restaurant as favourite')
-                .find('i.fa-star').should('have.class', 'unmarked')
+            detailsPage.getFavouriteButtonIcon()
+                .should('have.class', 'unmarked')
 
             detailsPage.API.interceptMarkAsFavourite()
 
-            cy.getById('mark-as-favourite')
-                .click()
+            detailsPage.clickFavouriteButton()
                 .should('be.disabled')
                 .and('contain.text', 'Unmark restaurant as favourite')
-                .find('i.fa-star').should('have.class', 'marked')
+            detailsPage.getFavouriteButtonIcon()
+                .should('have.class', 'marked')
 
             cy.getById('favourite-spinner').should('be.visible')
             
@@ -280,10 +278,11 @@ describe('Details page', () => {
 
             cy.getById('favourite-spinner').should('not.be.visible')
 
-            cy.getById('mark-as-favourite')
+            detailsPage.getFavouriteButton()
                 .should('not.be.disabled')
                 .and('contain.text', 'Unmark restaurant as favourite')
-                .find('i.fa-star').should('have.class', 'marked')
+            detailsPage.getFavouriteButtonIcon()
+                .should('have.class', 'marked')
         })
 
         it('displays an error notification when marking as favourite fails', () => {
@@ -291,7 +290,7 @@ describe('Details page', () => {
                 .then(({ response }) => response.body)
                 .should('have.property', 'is_favorite', 'false')
 
-            cy.getById('mark-as-favourite')
+            detailsPage.getFavouriteButton()
                 .should('contain.text', 'Mark restaurant as favourite')
 
             detailsPage.API.interceptMarkAsFavourite()
@@ -299,17 +298,20 @@ describe('Details page', () => {
             cy.goOffline().then(() => {
                 detailsPage.closeToast() // close offline notification
 
-                cy.getById('mark-as-favourite')
-                    .click()
+                detailsPage.clickFavouriteButton()
 
-                    detailsPage.getErrorToast()
-                        .should('be.visible')
-                        .and('contain.text', 'An error occurred marking restaurant as favourite')
+                detailsPage.getErrorToast()
+                    .should('be.visible')
+                    .and('contain.text', 'An error occurred marking restaurant as favourite')
 
-                cy.getById('mark-as-favourite')
+                detailsPage.getFavouriteButton()
                     .should('not.be.disabled')
                     .and('contain.text', 'Mark restaurant as favourite')
-                    .find('i.fa-star').should('have.class', 'unmarked')
+                detailsPage.getFavouriteButtonIcon()
+                    .should('have.class', 'unmarked')
+
+                detailsPage.API.spyMarkAsFavourite()
+                    .should('not.have.been.called')
             })
         })
     })

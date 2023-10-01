@@ -18,7 +18,7 @@ export class DetailsPage {
     visitRestaurant(restaurantId: number) {
         if (restaurantId < 1 || restaurantId > 10)
             throw new RangeError('Restaurant ID should be from 1 to 10 (inclusive)')
-        
+
         cy.visit(`/restaurant.html?id=${restaurantId}`)
     }
 
@@ -164,6 +164,14 @@ export class DetailsPage {
         return cy.get('.close-toast')
     }
 
+    getFavouriteButton(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.getById('mark-as-favourite')
+    }
+
+    getFavouriteButtonIcon(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return this.getFavouriteButton().find('i.fa-star')
+    }
+
     /* UI actions */
 
     clickAddReviewButton() {
@@ -194,6 +202,10 @@ export class DetailsPage {
 
     closeToast() {
         return this.getCloseToastButton().click()
+    }
+
+    clickFavouriteButton() {
+        return this.getFavouriteButton().click()
     }
 
 }
