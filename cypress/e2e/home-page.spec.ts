@@ -102,17 +102,17 @@ describe('Home page', () => {
     describe('restaurant filters', () => {
         it('filters restaurant by neighborhood', () => {
             homePage.filterRestaurantsByNeighborhood(Neighborhoods.Brooklyn)
-                .then(verifyFilteredRestaurants)
+                .then((filteredRestaurants) => verifyFilteredRestaurants(homePage, filteredRestaurants))
         })
 
         it('filters restaurant by cuisine', () => {
             homePage.filterRestaurantsByCuisine(Cuisines.Pizza)
-                .then(verifyFilteredRestaurants)
+                .then((filteredRestaurants) => verifyFilteredRestaurants(homePage, filteredRestaurants))
         })
 
         it('filters restaurant by neighborhood and cuisine', () => {
             homePage.filterRestaurantsByNeighborhoodAndCuisine(Neighborhoods.Queens, Cuisines.Mexican)
-                .then(verifyFilteredRestaurants)
+                .then((filteredRestaurants) => verifyFilteredRestaurants(homePage, filteredRestaurants))
         })
 
         it('shows complete list of restaurants when filters are reset', () => {
@@ -130,14 +130,14 @@ describe('Home page', () => {
                     
                 })
         })
-
-        function verifyFilteredRestaurants(filteredRestaurants: Set<string>) {
-            homePage.getRestaurants()
-                .should('have.length', filteredRestaurants.size)
-                .each((restaurantElement) => {
-                    const restaurantName = homePage.getNameOfRestaurantFromElement(restaurantElement)
-                    expect(filteredRestaurants).to.contain(restaurantName)
-                })
-        }
     })
 })
+
+export function verifyFilteredRestaurants(homePage: HomePage, filteredRestaurants: Set<string>) {
+    homePage.getRestaurants()
+        .should('have.length', filteredRestaurants.size)
+        .each((restaurantElement) => {
+            const restaurantName = homePage.getNameOfRestaurantFromElement(restaurantElement)
+            expect(filteredRestaurants).to.contain(restaurantName)
+        })
+}
