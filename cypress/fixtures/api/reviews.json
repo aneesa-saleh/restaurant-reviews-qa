@@ -1,0 +1,20 @@
+[
+    {
+      "id": 28,
+      "restaurant_id": 10,
+      "name": "Steve",
+      "createdAt": 1504095567183,
+      "updatedAt": 1504095567183,
+      "rating": 5,
+      "comments": "Head to this laid-back Long Island City restaurant for beef tongue tacos, chicken smothered in a heady mole sauce, and a monster crab tostada. New York's only Michelin-starred Mexican restaurant is an especially cool choice for lunch during the week or drinks after work. Eater critic Ryan Sutton awarded this restaurant two stars."
+    },
+    {
+      "id": 29,
+      "restaurant_id": 10,
+      "name": "Rob",
+      "createdAt": 1504095567183,
+      "updatedAt": 1504095567183,
+      "rating": 5,
+      "comments": "The hype was real. Please go. Get the ceviche. And the tres leches. You're welcome"
+    }
+  ]

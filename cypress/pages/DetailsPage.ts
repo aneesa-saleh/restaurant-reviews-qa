@@ -5,8 +5,18 @@ export class DetailsPage {
 
     API: DetailsPageAPI
 
-    constructor() {
-        this.API = new DetailsPageAPI()
+    private defaultOptions = {
+        shouldStubReviews: false,
+        shouldWaitForReviews: false,
+    }
+
+    constructor(_options? : DetailsPageOptions) {
+        const options  = _options || this.defaultOptions
+        this.API = new DetailsPageAPI(options)
+    }
+
+    visitRestaurant(id: number) {
+        cy.visit(`/restaurant.html?id=${id}`)
     }
 
     /* Locators */
@@ -175,6 +185,11 @@ export class DetailsPage {
         return this.getCloseToastButton().click()
     }
 
+}
+
+export type DetailsPageOptions = {
+    shouldStubReviews?: boolean;
+    shouldWaitForReviews?: boolean;
 }
 
 type ReviewElements = {

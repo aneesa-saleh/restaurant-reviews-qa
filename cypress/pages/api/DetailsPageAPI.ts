@@ -1,10 +1,15 @@
+import { DetailsPageOptions } from "../DetailsPage"
 import { Restaurant } from "../models/restaurant"
 import { Review } from "../models/review"
 
 export class DetailsPageAPI {
-    constructor() {
+    constructor({ shouldStubReviews = false, shouldWaitForReviews = false } : DetailsPageOptions) {
         this.interceptRestaurantDetails()
-        this.interceptReviews()
+
+        shouldStubReviews ? this.interceptAndStubReviews() : this.interceptReviews()
+        
+        if (shouldWaitForReviews) this.waitForReviews()
+
     }
 
     interceptRestaurantDetails() {
@@ -21,8 +26,16 @@ export class DetailsPageAPI {
                 .as('addReview')
     }
 
+    interceptAndStubReviews() {
+        cy.intercept('POST', '/reviews', { fixture: 'api/reviews.json'}).as('addReview')
+    }
+
     waitForAddReview() {
-        cy.wait('@addReview')
+        return cy.wait('@addReview')
+    }
+
+    waitForReviews() {
+        return cy.wait('@reviews', { timeout: 5000 })
     }
 
     getRestaurantDetailsRequest() {
