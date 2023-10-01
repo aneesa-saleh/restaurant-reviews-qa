@@ -1,7 +1,7 @@
 import { Utils } from "../support/common/Utils"
 import { Restaurant } from "../pages/models/restaurant"
 import { HomePage } from "../pages/HomePage"
-import { AddReviewForm } from "../pages/api/DetailsPageAPI"
+import { AddReviewFormData } from "../pages/api/DetailsPageAPI"
 import { DetailsPage } from "../pages/DetailsPage"
 
 describe('Details page', () => {
@@ -62,25 +62,88 @@ describe('Details page', () => {
     })
 
     describe('adding a review', () => {
-        const formData: AddReviewForm = {
+        const sampleFormData: AddReviewFormData = {
             name: 'Aneesa',
-            rating: 4,
+            rating: '4',
             comment: 'Splendid'
         }
 
+        describe('form validation', () => {
+            let detailsPage: DetailsPage
+
+            beforeEach(() => {
+                homePage.clickViewDetailsLink(0).then(({ detailsPage: _detailsPage }) => {
+                    detailsPage = _detailsPage
+                    
+                    detailsPage.API.interceptAndStubAddReview(sampleFormData)
+    
+                    detailsPage.clickAddReviewButton()
+                    detailsPage.getModal().should('be.visible')
+    
+                    // form is blank
+
+                    detailsPage.clickSubmitReviewButton()
+                })
+            })
+
+            it('displays form errors and does not submit for invalid input', () => {
+                detailsPage.getModal().should('be.visible')
+
+                detailsPage.getNameField().should('have.class', 'has-error')
+                detailsPage.getNameFieldError().should('be.visible')
+                    .and('contain.text', 'This field is required')
+
+                detailsPage.getRatingField().should('have.class', 'has-error')
+                detailsPage.getRatingFieldError().should('be.visible')
+                    .and('contain.text', 'This field is required')
+
+                detailsPage.getCommentsField().should('have.class', 'has-error')
+                detailsPage.getCommentsFieldError().should('be.visible')
+                    .and('contain.text', 'This field is required')
+                
+                detailsPage.getFormErrorMessage().should('be.visible')
+                    .and('contain.text', 'name')
+                    .and('contain.text', 'rating')
+                    .and('contain.text', 'comments')
+
+                detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                    expect(interceptedRequest).to.be.null
+                })
+            })
+
+            it('clears form errors and submits a valid form after errors are resolved', () => {
+                
+                detailsPage.typeName(sampleFormData.name)
+                    .should('not.have.class', 'has-error')
+                detailsPage.getNameFieldError().should('not.be.visible')
+
+                detailsPage.chooseRating(sampleFormData.rating)
+                    .should('not.have.class', 'has-error')
+                detailsPage.getRatingFieldError().should('not.be.visible')
+
+                detailsPage.typeComment(sampleFormData.comment)
+                    .should('not.have.class', 'has-error')
+                detailsPage.getCommentsFieldError().should('not.be.visible')
+
+                detailsPage.clickSubmitReviewButton()
+                
+                detailsPage.API.waitForAddReview()
+                detailsPage.getModal().should('not.be.visible')
+            })
+        })
+
         it('saves a review successfully to API when user is online', () => {
             homePage.clickViewDetailsLink(0).then(({ detailsPage, restaurantName }) => {
-                
 
-                detailsPage.API.interceptAndStubAddReview(formData)
+                detailsPage.API.interceptAndStubAddReview(sampleFormData)
 
                 detailsPage.clickAddReviewButton()
                 detailsPage.getModal().should('be.visible')
                 detailsPage.getModalTitle().should('contain.text', restaurantName)
 
-                detailsPage.typeName(formData.name)
-                detailsPage.chooseRating(formData.rating)
-                detailsPage.typeComment(formData.comment)
+                detailsPage.typeName(sampleFormData.name)
+                detailsPage.chooseRating(sampleFormData.rating)
+                detailsPage.typeComment(sampleFormData.comment)
  
                 detailsPage.clickSubmitReviewButton()
 
@@ -93,9 +156,9 @@ describe('Details page', () => {
 
                 detailsPage.getMostRecentReview().then((newReview) => {
                     const newReviewElements = detailsPage.getReviewElements(newReview)
-                    expect(newReviewElements.reviewerName).to.contain.text(formData.name)
-                    expect(newReviewElements.rating).to.contain.text(`${formData.rating}`)
-                    expect(newReviewElements.comment).to.contain.text(formData.comment)
+                    expect(newReviewElements.reviewerName).to.contain.text(sampleFormData.name)
+                    expect(newReviewElements.rating).to.contain.text(`${sampleFormData.rating}`)
+                    expect(newReviewElements.comment).to.contain.text(sampleFormData.comment)
                     expect(newReviewElements.date).not.to.be.empty
                 })
 
@@ -110,7 +173,7 @@ describe('Details page', () => {
             // required (going back online), which won't happen if the test fails
             // for any reason, causing all subsequents test to fail since it can't
             // connect to cypress
-
+            
             after(() => {
                 cy.goOnline()
             })
@@ -118,20 +181,24 @@ describe('Details page', () => {
             it('does not submit review', () => {
                 homePage.clickViewDetailsLink(0).then(({ detailsPage }) => {
                     // service workers are disabled during [automated] test mode
+                    // so offline capabilities like saving requests in idb won't work
+
+                    // wait for reviews to load before going offline
+                    detailsPage.API.getReviewsRequest().should('have.been.called')
     
                     cy.goOffline().then(() => {
                         detailsPage.getErrorToast().should('be.visible')
                             .and('contain.text', 'You are offline')
                         detailsPage.closeToast()
         
-                        detailsPage.API.interceptAndStubAddReview(formData)
+                        detailsPage.API.interceptAndStubAddReview(sampleFormData)
         
                         detailsPage.clickAddReviewButton()
                         detailsPage.getModal().should('be.visible')
         
-                        detailsPage.typeName(formData.name)
-                        detailsPage.chooseRating(formData.rating)
-                        detailsPage.typeComment(formData.comment)
+                        detailsPage.typeName(sampleFormData.name)
+                        detailsPage.chooseRating(sampleFormData.rating)
+                        detailsPage.typeComment(sampleFormData.comment)
          
                         detailsPage.clickSubmitReviewButton()
     
@@ -146,6 +213,5 @@ describe('Details page', () => {
                 })
             })
         })
-
     })
 })

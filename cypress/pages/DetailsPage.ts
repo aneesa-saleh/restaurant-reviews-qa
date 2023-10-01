@@ -146,33 +146,33 @@ export class DetailsPage {
     /* UI actions */
 
     clickAddReviewButton() {
-        this.getAddReviewButton().click()
+        return this.getAddReviewButton().click()
     }
 
     typeName(name: string) {
-        this.getNameField().type(name)
+        return this.getNameField().type(name)
     }
 
-    chooseRating(rating: number) {
-        this.getRatingField()
+    chooseRating(rating: string) {
+        return this.getRatingField()
             .invoke('val', rating)
             .trigger('change')
     }
 
     typeComment(comment: string) {
-        this.getCommentsField().type(comment)
+        return this.getCommentsField().type(comment)
     }
 
     clickSubmitReviewButton() {
-        this.getSubmitReviewButton().click()
+        return this.getSubmitReviewButton().click()
     }
 
     clickCancelButton() {
-        this.getCancelButton().click()
+        return this.getCancelButton().click()
     }
 
     closeToast() {
-        this.getCloseToastButton().click()
+        return this.getCloseToastButton().click()
     }
 
 }

@@ -1,7 +1,7 @@
 export type Review = {
     restaurant_id: number;
     name: string;
-    rating: number;
+    rating: string;
     comments: string;
     createdAt: string;
     updatedAt: string;
