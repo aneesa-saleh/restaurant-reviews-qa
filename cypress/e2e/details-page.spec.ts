@@ -64,6 +64,39 @@ describe('Details page', () => {
             comment: 'Splendid'
         }
 
+        it('saves a review successfully to API when user is online', () => {
+            detailsPage = new DetailsPage()
+            detailsPage.visitRestaurant(1)
+
+            detailsPage.API.interceptAndStubAddReview(sampleFormData)
+
+            detailsPage.clickAddReviewButton()
+            detailsPage.getModal().should('be.visible')
+
+            detailsPage.typeName(sampleFormData.name)
+            detailsPage.chooseRating(sampleFormData.rating)
+            detailsPage.typeComment(sampleFormData.comment)
+
+            detailsPage.clickSubmitReviewButton()
+
+            detailsPage.getModal().should('not.be.visible')
+
+            detailsPage.getSuccessToast()
+                .should('be.visible')
+
+            detailsPage.getMostRecentReview().then((newReview) => {
+                const newReviewElements = detailsPage.getElementsOfReview(newReview)
+                expect(newReviewElements.reviewerName).to.contain.text(sampleFormData.name)
+                expect(newReviewElements.rating).to.contain.text(`${sampleFormData.rating}`)
+                expect(newReviewElements.comment).to.contain.text(sampleFormData.comment)
+                expect(newReviewElements.date).not.to.be.empty
+            })
+
+            detailsPage.API.getAddReview().then((interceptedRequest) => {
+                expect(interceptedRequest).not.to.be.null
+            })
+        })
+
         describe('form validation', () => {
             beforeEach(() => {
                 const detailsPage = new DetailsPage()
@@ -121,39 +154,13 @@ describe('Details page', () => {
                 detailsPage.clickSubmitReviewButton()
                 
                 detailsPage.getModal().should('not.be.visible')
-            })
-        })
 
-        it('saves a review successfully to API when user is online', () => {
-            detailsPage = new DetailsPage()
-            detailsPage.visitRestaurant(1)
+                detailsPage.getSuccessToast()
+                    .should('be.visible')
 
-            detailsPage.API.interceptAndStubAddReview(sampleFormData)
-
-            detailsPage.clickAddReviewButton()
-            detailsPage.getModal().should('be.visible')
-
-            detailsPage.typeName(sampleFormData.name)
-            detailsPage.chooseRating(sampleFormData.rating)
-            detailsPage.typeComment(sampleFormData.comment)
-
-            detailsPage.clickSubmitReviewButton()
-
-            detailsPage.getModal().should('not.be.visible')
-
-            detailsPage.getSuccessToast()
-                .should('be.visible')
-
-            detailsPage.getMostRecentReview().then((newReview) => {
-                const newReviewElements = detailsPage.getElementsOfReview(newReview)
-                expect(newReviewElements.reviewerName).to.contain.text(sampleFormData.name)
-                expect(newReviewElements.rating).to.contain.text(`${sampleFormData.rating}`)
-                expect(newReviewElements.comment).to.contain.text(sampleFormData.comment)
-                expect(newReviewElements.date).not.to.be.empty
-            })
-
-            detailsPage.API.getAddReview().then((interceptedRequest) => {
-                expect(interceptedRequest).not.to.be.null
+                detailsPage.API.getAddReview().then((interceptedRequest) => {
+                    expect(interceptedRequest).not.to.be.null
+                })
             })
         })
 
