@@ -3,21 +3,15 @@ import { Restaurant } from "../models/restaurant"
 import { Review } from "../models/review"
 
 export class DetailsPageAPI {
-    constructor({ shouldStubReviews = false, shouldWaitForReviews = false } : DetailsPageOptions) {
+    constructor({ shouldStubReviews = false  } : DetailsPageOptions) {
         this.interceptRestaurantDetails()
 
         shouldStubReviews ? this.interceptAndStubReviews() : this.interceptReviews()
-        
-        if (shouldWaitForReviews) this.waitForReviews()
 
     }
 
     interceptRestaurantDetails() {
         cy.intercept('/restaurants/*').as('restaurantDetails')
-    }
-
-    interceptReviews() {
-        cy.intercept('/reviews/?restaurant_id=*', cy.spy().as('reviews'))
     }
 
     interceptAndStubAddReview(formData: AddReviewFormData) {
@@ -26,8 +20,12 @@ export class DetailsPageAPI {
                 .as('addReview')
     }
 
+    interceptReviews() {
+        cy.intercept('/reviews/?restaurant_id=*', cy.spy().as('reviewsSpy')).as('reviews')
+    }
+
     interceptAndStubReviews() {
-        cy.intercept('POST', '/reviews', { fixture: 'api/reviews.json'}).as('addReview')
+        cy.intercept('/reviews/?restaurant_id=*', { fixture: 'api/reviews.json'}).as('reviews')
     }
 
     waitForAddReview() {
@@ -35,26 +33,34 @@ export class DetailsPageAPI {
     }
 
     waitForReviews() {
-        return cy.wait('@reviews', { timeout: 5000 })
+        return cy.wait('@reviews').then((interception) => {
+            const reviews: Array<Review> = Array.from(interception.response?.body)
+            return cy.wrap(reviews)
+        })
     }
 
-    getRestaurantDetailsRequest() {
-        return cy.get('@restaurantDetails')
-    }
-
-    getReviewsRequest() {
-        return cy.get('@reviews')
-    }
-
-    getAddReviewRequest() {
-        return cy.get('@addReview')
+    waitForRestaurantDetails() {
+        return cy.wait('@restaurantDetails')
     }
 
     getRestaurantDetails(): Cypress.Chainable<Restaurant> {
-        return cy.wait('@restaurantDetails').then((interception: any) => {
+        return this.waitForRestaurantDetails().then((interception: any) => {
             const restaurant: Restaurant = interception.response?.body
             return cy.wrap(restaurant)
         })
+    }
+
+    getReviews() {
+        return cy.get('@reviews')
+    }
+
+    spyOnReviews() {
+        return cy.get('@reviewsSpy')
+    }
+    
+
+    getAddReview() {
+        return cy.get('@addReview')
     }
 
     generateAddReviewResponse(formData: AddReviewFormData): Review {

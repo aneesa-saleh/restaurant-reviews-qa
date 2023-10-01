@@ -8,11 +8,9 @@ describe('Details page', () => {
 
     let homePage: HomePage
 
-    beforeEach(() => {
-        homePage = new HomePage()
-    })
-
     it('shows complete details of a restaurant', () => {
+        homePage = new HomePage()
+
         homePage.clickViewDetailsLink(5).then(({ restaurantName: restaurantNameFromLink, detailsPage }) => {
             detailsPage.API.getRestaurantDetails().then((restaurant: Restaurant) => {
                     expect(restaurant).not.to.be.null
@@ -62,6 +60,10 @@ describe('Details page', () => {
     })
 
     describe('adding a review', () => {
+        beforeEach(() => {
+            homePage = new HomePage()
+        })
+
         const sampleFormData: AddReviewFormData = {
             name: 'Aneesa',
             rating: '4',
@@ -106,7 +108,7 @@ describe('Details page', () => {
                     .and('contain.text', 'rating')
                     .and('contain.text', 'comments')
 
-                detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                detailsPage.API.getAddReview().then((interceptedRequest) => {
                     expect(interceptedRequest).to.be.null
                 })
             })
@@ -127,7 +129,6 @@ describe('Details page', () => {
 
                 detailsPage.clickSubmitReviewButton()
                 
-                detailsPage.API.waitForAddReview()
                 detailsPage.getModal().should('not.be.visible')
             })
         })
@@ -147,22 +148,20 @@ describe('Details page', () => {
  
                 detailsPage.clickSubmitReviewButton()
 
-                detailsPage.API.waitForAddReview()
-
                 detailsPage.getModal().should('not.be.visible')
 
                 detailsPage.getSuccessToast()
                     .should('be.visible')
 
                 detailsPage.getMostRecentReview().then((newReview) => {
-                    const newReviewElements = detailsPage.getReviewElements(newReview)
+                    const newReviewElements = detailsPage.getElementsOfReview(newReview)
                     expect(newReviewElements.reviewerName).to.contain.text(sampleFormData.name)
                     expect(newReviewElements.rating).to.contain.text(`${sampleFormData.rating}`)
                     expect(newReviewElements.comment).to.contain.text(sampleFormData.comment)
                     expect(newReviewElements.date).not.to.be.empty
                 })
 
-                detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                detailsPage.API.getAddReview().then((interceptedRequest) => {
                     expect(interceptedRequest).not.to.be.null
                 })
             })
@@ -184,7 +183,7 @@ describe('Details page', () => {
                     // so offline capabilities like saving requests in idb won't work
 
                     // wait for reviews to load before going offline
-                    detailsPage.API.getReviewsRequest().should('have.been.called')
+                    detailsPage.API.spyOnReviews().should('have.been.called')
     
                     cy.goOffline().then(() => {
                         detailsPage.getErrorToast().should('be.visible')
@@ -206,12 +205,34 @@ describe('Details page', () => {
                             .and('contain.text', 'An error occurred. Please try again')
                         detailsPage.getModal().should('be.visible')
         
-                        detailsPage.API.getAddReviewRequest().then((interceptedRequest) => {
+                        detailsPage.API.getAddReview().then((interceptedRequest) => {
                             expect(interceptedRequest).to.be.null
                         })
                     })
                 })
             })
+        })
+    })
+
+    it.only('renders reviews list', () => {
+        const detailsPage: DetailsPage = new DetailsPage({
+            shouldStubReviews: true
+        })
+
+        detailsPage.visitRestaurant(1)
+        detailsPage.API.waitForReviews().then((reviews) => {
+
+            detailsPage.getReviewsList().should('be.visible')
+
+            detailsPage.getReviews().should('have.length', reviews.length)
+                .each((reviewElement, index) => {
+                    const corresponsingReview = reviews[reviews.length - 1 -index] // go in reverse order
+                    const { reviewerName, rating, comment } = detailsPage.getElementsOfReview(reviewElement)
+
+                    expect(reviewerName).to.have.text(corresponsingReview.name)
+                    expect(rating).to.contain.text(corresponsingReview.rating)
+                    expect(comment).to.have.text(corresponsingReview.comments)
+                })
         })
     })
 })

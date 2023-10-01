@@ -15,8 +15,8 @@ export class DetailsPage {
         this.API = new DetailsPageAPI(options)
     }
 
-    visitRestaurant(id: number) {
-        cy.visit(`/restaurant.html?id=${id}`)
+    visitRestaurant(restaurantId: number) {
+        cy.visit(`/restaurant.html?id=${restaurantId}`)
     }
 
     /* Locators */
@@ -113,6 +113,14 @@ export class DetailsPage {
         return cy.getByClass('overlay-content').contains('button', 'Cancel')
     }
 
+    getReviewsList(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.getById('reviews-list')
+    }
+
+    getReviews(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get('article.review')
+    }
+
     getReview(index: number): Cypress.Chainable<JQuery<HTMLElement>> {
         return cy.get('article.review')
             .should('have.length.greaterThan', index)
@@ -127,7 +135,7 @@ export class DetailsPage {
         return cy.get('article.review.sending')
     }
 
-    getReviewElements(review: JQuery<HTMLElement>): ReviewElements {
+    getElementsOfReview(review: JQuery<HTMLElement>): ReviewElements {
         return {
             reviewerName: review.find('p.review-name'),
             date: review.find('p.review-date'),
@@ -189,7 +197,6 @@ export class DetailsPage {
 
 export type DetailsPageOptions = {
     shouldStubReviews?: boolean;
-    shouldWaitForReviews?: boolean;
 }
 
 type ReviewElements = {
