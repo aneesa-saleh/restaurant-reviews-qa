@@ -1,3 +1,4 @@
+import { Cuisines, Neighborhoods } from "../../support/common/constants"
 import { Restaurant } from "../models/restaurant"
 
 export class HomePageAPI {
@@ -7,6 +8,12 @@ export class HomePageAPI {
     
     interceptRestaurants() {
         cy.intercept('/restaurants').as('restaurantsAPIRequest')
+    }
+
+    getRestaurantByNeighborhoodAndCuisine(neighborhood: Neighborhoods, cuisine: Cuisines) {
+        const url = `${Cypress.env('apiUrl')}restaurants?neighborhood=${neighborhood}&cuisine_type=${cuisine}`
+
+        return cy.request(url).as('getRestaurantByNeighborhoodAndCuisineFromAPI')
     }
 
     getRestaurants(): Cypress.Chainable<Array<Restaurant>> {
