@@ -10,6 +10,28 @@ export class DetailsPageAPI {
 
     }
 
+    unmarkRestaurantAsFavouriteAPICall(restaurantId: number) {
+        if (restaurantId < 1 || restaurantId > 10)
+            throw new RangeError('Restaurant ID should be from 1 to 10 (inclusive)')
+
+        const url = `${Cypress.env('apiUrl')}restaurants/${restaurantId}/?is_favorite=false`
+
+        return cy.request('PUT', url).as('unmarkAsFavouriteAPICall')
+    }
+
+    markRestaurantAsFavouriteAPICall(restaurantId: number) {
+        if (restaurantId < 1 || restaurantId > 10)
+            throw new RangeError('Restaurant ID should be from 1 to 10 (inclusive)')
+
+        const url = `${Cypress.env('apiUrl')}restaurants/${restaurantId}/?is_favorite=true`
+
+        return cy.request('PUT', url).as('markAsFavouriteAPICall')
+    }
+
+    interceptMarkAsFavourite() {
+        return cy.intercept('/restaurants/*/?is_favorite=true').as('markAsFavourite')
+    }
+
     interceptRestaurantDetails() {
         cy.intercept('/restaurants/*').as('restaurantDetails')
     }
@@ -43,6 +65,10 @@ export class DetailsPageAPI {
         return cy.wait('@restaurantDetails')
     }
 
+    waitForMarkAsFavourite() {
+        return cy.wait('@markAsFavourite')
+    }
+
     getRestaurantDetails(): Cypress.Chainable<Restaurant> {
         return this.waitForRestaurantDetails().then((interception: any) => {
             const restaurant: Restaurant = interception.response?.body
@@ -61,6 +87,14 @@ export class DetailsPageAPI {
 
     getAddReview() {
         return cy.get('@addReview')
+    }
+
+    getUnmarkAsFavouriteAPICall() {
+        return cy.get('@unmarkAsFavouriteAPICall')
+    }
+
+    getMarkAsFavouriteAPICall() {
+        return cy.get('@markAsFavouriteAPICall')
     }
 
     generateAddReviewResponse(formData: AddReviewFormData): Review {

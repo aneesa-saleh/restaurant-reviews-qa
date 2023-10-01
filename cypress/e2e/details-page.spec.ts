@@ -227,4 +227,61 @@ describe('Details page', () => {
                 })
         })
     })
+
+    describe.only('mark a restaurant as favourite', () => {
+        const restaurantId = 3
+
+        beforeEach(() => {
+            detailsPage = new DetailsPage()
+
+            detailsPage.API.unmarkRestaurantAsFavouriteAPICall(restaurantId)
+                .should((response) => {
+                    expect(response.isOkStatusCode).to.be.true
+                    expect(response.body).to.have.property('is_favorite')
+                        .to.equal('false')
+                })
+            detailsPage.visitRestaurant(restaurantId)
+        })
+
+        // unmark restaurant as favourite before test
+        it('marks a restaurant as favourite when mark as favourite button is clicked', () => {
+            detailsPage.API.waitForRestaurantDetails()
+                .then(({ response }) => response.body)
+                .should('have.property', 'is_favorite', 'false')
+
+            cy.getById('mark-as-favourite')
+                .should('contain.text', 'Mark restaurant as favourite')
+                .find('i.fa-star').should('have.class', 'unmarked')
+
+            detailsPage.API.interceptMarkAsFavourite()
+
+            cy.getById('mark-as-favourite')
+                .click()
+                .should('be.disabled')
+                .and('contain.text', 'Unmark restaurant as favourite')
+                .find('i.fa-star').should('have.class', 'marked')
+
+            cy.getById('favourite-spinner').should('be.visible')
+            
+            detailsPage.API.waitForMarkAsFavourite()
+                .should(({ response }) => {
+                    expect(response.statusCode).to.equal(200)
+                })
+
+            cy.getById('favourite-spinner').should('not.be.visible')
+
+            cy.getById('mark-as-favourite')
+                .should('not.be.disabled')
+                .and('contain.text', 'Unmark restaurant as favourite')
+                .find('i.fa-star').should('have.class', 'marked')
+        })
+
+        it('displays an error notification when marking as favourite fails')
+    })
+
+    describe('unmark a restaurant as favourite', () => {
+        // unmark restaurant as favourite before test
+        it('unmarks a restaurant as favourite when unmark as favourite button is clicked')
+        it('displays an error notification when unmarking as favourite fails')
+    })
 })
