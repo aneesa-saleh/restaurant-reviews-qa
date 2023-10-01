@@ -42,6 +42,10 @@ export class DetailsPageAPI {
         cy.intercept('/restaurants/*').as('restaurantDetails')
     }
 
+    interceptAddReview() {
+        cy.intercept('POST', '/reviews', cy.spy().as('addReviewSpy')).as('addReview')
+    }
+
     interceptAndStubAddReview(formData: AddReviewFormData) {
         const addReviewResponse: Review = this.generateAddReviewResponse(formData)
         cy.intercept('POST', '/reviews', addReviewResponse)
@@ -90,6 +94,18 @@ export class DetailsPageAPI {
         return cy.get('@reviews')
     }
 
+    getAddReview() {
+        return cy.get('@addReview')
+    }
+
+    getUnmarkAsFavouriteAPICall() {
+        return cy.get('@unmarkAsFavouriteAPICall')
+    }
+
+    getMarkAsFavouriteAPICall() {
+        return cy.get('@markAsFavouriteAPICall')
+    }
+
     spyOnReviews() {
         return cy.get('@reviewsSpy')
     }
@@ -102,16 +118,8 @@ export class DetailsPageAPI {
         return cy.get('@unmarkAsFavouriteSpy')
     }
 
-    getAddReview() {
-        return cy.get('@addReview')
-    }
-
-    getUnmarkAsFavouriteAPICall() {
-        return cy.get('@unmarkAsFavouriteAPICall')
-    }
-
-    getMarkAsFavouriteAPICall() {
-        return cy.get('@markAsFavouriteAPICall')
+    spyOnAddReview() {
+        return cy.get('@addReviewSpy')
     }
 
     generateAddReviewResponse(formData: AddReviewFormData): Review {

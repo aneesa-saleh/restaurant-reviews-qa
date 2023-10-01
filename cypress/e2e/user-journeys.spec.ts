@@ -1,6 +1,6 @@
 import { DetailsPage } from "../pages/DetailsPage"
 import { HomePage } from "../pages/HomePage"
-import { DetailsPageAPI } from "../pages/api/DetailsPageAPI"
+import { AddReviewFormData, DetailsPageAPI } from "../pages/api/DetailsPageAPI"
 import { HomePageAPI } from "../pages/api/HomePageAPI"
 import { Restaurant } from "../pages/models/restaurant"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
@@ -91,11 +91,68 @@ describe('User journeys', () => {
         })
     })
 
-    it('a user can navigate to a restaurant using its URL and leave a review for it', () => {
+    it('a user can navigate to a restaurant from the map and leave a review for it', () => {
+        const review: AddReviewFormData = {
+            name: 'Amanda',
+            rating: '4',
+            comment: 'Best meal I\'ve ever tasted!'
+        }
+
         /* Scenario: User goes to home page and clicks on a map pin to navigate to a restaurant near them */
-        /* They have a meal there and decide to leave a review */
-        /* They enter a name and rating but forgot to add a comment and try to submit */
-        /* They see the validation error, and type in the comment */
-        /* They submit and check that the review is in the list now */
+
+        homePage = new HomePage()
+        homePage.visit()
+
+        homePage.clickMapPin(5)
+            .then(({ detailsPage }) => {
+                detailsPage.API.waitForRestaurantDetails()
+                detailsPage.API.interceptAddReview()
+
+                /* They have a meal there and decide to leave a review */
+                /* They enter a name and rating but forgot to add a comment and try to submit */
+
+                detailsPage.clickAddReviewButton()
+                detailsPage.getModal()
+                    .should('be.visible')
+                detailsPage.typeName(review.name)
+                detailsPage.chooseRating(review.rating)
+                detailsPage.clickSubmitReviewButton()
+
+                /* They see the validation error, and type in the comment */
+                detailsPage.getModal().should('be.visible')
+
+                detailsPage.getCommentsField().should('have.class', 'has-error')
+                    .and('be.focused')
+                detailsPage.getCommentsFieldError().should('be.visible')
+                    .and('contain.text', 'This field is required')
+
+                detailsPage.getFormErrorMessage().should('be.visible')
+                    .and('contain.text', 'comments')
+                    .and('not.contain.text', 'name')
+                    .and('not.contain.text', 'rating')
+
+                detailsPage.API.spyOnAddReview().should('not.have.been.called')
+
+                detailsPage.typeComment(review.comment)
+                    .should('not.have.class', 'has-error')
+                detailsPage.getCommentsFieldError().should('not.be.visible')
+                    
+                /* They submit and check that the review is in the list now */
+
+                detailsPage.clickSubmitReviewButton()
+                
+                detailsPage.getModal().should('not.be.visible')
+
+                detailsPage.getSuccessToast()
+                    .should('be.visible')
+
+                detailsPage.getMostRecentReview().then((newReview) => {
+                    const newReviewElements = detailsPage.getElementsOfReview(newReview)
+                    expect(newReviewElements.reviewerName).to.contain.text(review.name)
+                    expect(newReviewElements.rating).to.contain.text(`${review.rating}`)
+                    expect(newReviewElements.comment).to.contain.text(review.comment)
+                    expect(newReviewElements.date).not.to.be.empty
+                })
+            })
     })
 })
