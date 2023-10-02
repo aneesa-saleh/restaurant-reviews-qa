@@ -14,3 +14,8 @@ RUN apt-get -y install curl
 # set up pnpm
 RUN corepack enable
 RUN corepack prepare pnpm@latest-8 --activate
+
+# install and verify cypress
+RUN cypress --version
+RUN cypress install
+RUN cypress verify
