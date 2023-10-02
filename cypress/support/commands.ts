@@ -1,14 +1,3 @@
-declare namespace Cypress {
-    interface Chainable {
-        getById(id: string): Chainable<JQuery<HTMLElement>>
-        getByClass(className: string): Chainable<JQuery<HTMLElement>>
-        
-        unregisterAllServiceWorkers(): void
-
-        goOffline(): Bluebird.Promise<any>
-        goOnline(): Bluebird.Promise<any>
-    }
-}
 
 Cypress.Commands.add('getById', (id: string) => {
     return cy.get(`#${id}`)

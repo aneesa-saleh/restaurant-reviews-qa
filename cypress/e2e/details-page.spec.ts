@@ -1,6 +1,5 @@
 import { Utils } from "../support/common/Utils"
 import { Restaurant } from "../pages/models/restaurant"
-import { HomePage } from "../pages/HomePage"
 import { AddReviewFormData } from "../pages/api/DetailsPageAPI"
 import { DetailsPage } from "../pages/DetailsPage"
 

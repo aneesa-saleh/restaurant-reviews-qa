@@ -1,13 +1,10 @@
-import { DetailsPage } from "../pages/DetailsPage"
 import { HomePage } from "../pages/HomePage"
 import { AddReviewFormData, DetailsPageAPI } from "../pages/api/DetailsPageAPI"
 import { HomePageAPI } from "../pages/api/HomePageAPI"
-import { Restaurant } from "../pages/models/restaurant"
 import { Cuisines, Neighborhoods } from "../support/common/constants"
 
 describe('User journeys', () => {
     let homePage: HomePage
-    let detailsPage: DetailsPage
 
     it('a user can search for and favourite a restaurant and review it', () => {
 
