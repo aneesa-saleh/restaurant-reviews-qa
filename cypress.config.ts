@@ -13,7 +13,7 @@ export default defineConfig({
   viewportHeight: 1080,
   viewportWidth: 1920,
   e2e: {
-    baseUrl: 'http://localhost:4200',
+    baseUrl: 'http://localhost:4300',
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
     excludeSpecPattern: ['**/1-getting-started/*', '**/2-advanced-examples/*'],
     video: false,
