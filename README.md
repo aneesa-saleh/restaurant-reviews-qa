@@ -58,6 +58,11 @@ npm run serve-and-open-cypress
 * In the Cypress Test Runner, click on `E2E Testing`
 * Select a browser and click on `Start E2E Testing in *Browser*`
 * Select the desired test suite under `cypress/e2e` and click on the test you want to run. There are two test files with End-to-End tests for each page of the application (`home-page.spec.ts, details-page.spec.ts`), and one that contains tests for User Journeys (`user-journeys.spec.ts`).
+* To run tests in headless mode and generate **JUnit** reports, run:
+```
+npm run serve-and-run-tests
+```
+* See `package.json` for more options such as running tests in different browsers and merging reports.
 
 ## License
 This project is licensed under the MIT License.

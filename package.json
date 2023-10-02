@@ -4,22 +4,23 @@
   "description": "QA Project for Restaurant Reviews Web App",
   "main": "index.js",
   "scripts": {
-    "test": "npm run cypress:run",
-    "cypress:open": "npx cypress open",
+    "delete:reports": "rm -r cypress/results || true",
+    "prereport": "npm run delete:reports",
     "cypress:run": "npm run prereport && npx cypress run",
     "cypress:run:chrome": "npm run prereport && npx cypress run -b chrome",
     "cypress:run:firefox": "npm run prereport && npx cypress run -b firefox",
     "cypress:run:edge": "npm run prereport && npx cypress run -b edge",
     "junit:merge": "npx junit-merge -d \"cypress/results/junit\" -o \"cypress/results/junit/results.xml\"",
-    "cypress:e2e": "npm run cypress:run; npm run junit:merge",
-    "cypress:e2e:chrome": "npm run cypress:run:chrome; npm run junit:merge",
-    "cypress:e2e:firefox": "npm run cypress:run:firefox; npm run junit:merge",
-    "cypress:e2e:edge": "npm run cypress:run:edge; npm run junit:merge",
-    "delete:reports": "rm -r cypress/results || true",
-    "prereport": "npm run delete:reports",
+    "cypress:report": "npm run cypress:run; npm run junit:merge",
+    "cypress:report:chrome": "npm run cypress:run:chrome; npm run junit:merge",
+    "cypress:report:firefox": "npm run cypress:run:firefox; npm run junit:merge",
+    "cypress:report:edge": "npm run cypress:run:edge; npm run junit:merge",
+    "cypress:open": "npx cypress open",
+    "test": "npm run cypress:run",
     "serve": "serve -l 4300 app",
-    "serve-and-test": "start-server-and-test serve http://localhost:4300 test",
-    "serve-and-open-cypress": "start-server-and-test serve http://localhost:4300 cypress:open"
+    "serve-and-run-tests": "start-server-and-test serve http://localhost:4300 test",
+    "serve-and-open-cypress": "start-server-and-test serve http://localhost:4300 cypress:open",
+    "serve-and-run-reports": "start-server-and-test serve http://localhost:4300 cypress:report"
   },
   "keywords": [
     "qa"
