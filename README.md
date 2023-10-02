@@ -3,7 +3,7 @@
 ## Introduction
 This is a Quality Assurance (QA) project for a [Restaurant Reviews](https://restaurant-reviews.glitch.me/) web application. The purpose of this project is to test core functionalities, as well as assess accessibility and offline capabilities.
 
-## Components
+## Overview
 The project has 4 main components:
 
 1. Automated end-to-end tests using [Cypress](https://www.cypress.io) and Typescript
@@ -34,8 +34,8 @@ Manual offline capability testing verifies that a subset of features work seamle
 
 ## Automated tests
 Automated tests are written using Cypress and Typescript. Tests are **End-to-End** tests that simulate how users would interact with the system, mostly connecting to the API with a few endpoints stubbed. There are also **User Journeys** that cover critical functionalities for frequently occuring scenarios.
-<br/>
-<br/>
+
+
 Follow these steps to set up and run Cypress tests.
 
 ### Prerequisites
@@ -63,6 +63,26 @@ npm run serve-and-open-cypress
 npm run serve-and-run-tests
 ```
 * See `package.json` for more options such as running tests in different browsers and merging reports.
+
+## CI/CD
+This project uses a **Jenkins** pipeline to run Cypress tests nightly and publish results to **Zephyr Scale**. To set up the pipeline, run Jenkins in a Docker container (see [here](https://www.jenkins.io/doc/book/installing/docker/) for set up instructions). Log in to Jenkins and create a new pipeline. In the **Pipeline** section, enter this info: 
+* **Definition**: *Pipeline script from SCM*
+* **SCM**: *Git*
+* **Repository URL**: *\<Link to your repo\>*
+* **Branches to build**: *\<Your branch\>*
+* **Script Path**: *Jenkinsfile*
+
+Click **Save**.
+
+To add an API key for Zephyr Scale, go to *Manage Jenkins > Security > Credentials > Click (global) > Click **+ Add Credentials***. Fill the new credential form with these details:
+* **Kind**: *Secret text*
+* **Scope**: *Global (...)*
+* **Secret**: *\<API Key\>*
+* **ID**: *jenkins-zephyr-scale-token*
+
+Click **Create**
+
+The pipeline is now set up to run.
 
 ## License
 This project is licensed under the MIT License.
