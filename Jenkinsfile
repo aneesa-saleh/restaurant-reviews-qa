@@ -18,7 +18,10 @@ pipeline {
                 echo "Installing packages..."
                 sh 'pnpm install'
                 echo "Verifying..."
-                sh 'cypress verify'
+                sh '''
+                cypress --version
+                cypress verify
+                '''
                 echo "Installation complete."
             }
         }
