@@ -9,9 +9,19 @@ pipeline {
         cron('H 21 * * *')
     }
 
-    options { buildDiscarder(logRotator(numToKeepStr: '7')) }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '7'))
+        skipDefaultCheckout(true)
+    }
 
     stages {
+
+        stage('checkout SCM') {
+            steps {
+                cleanWs()
+                checkout scm
+            }
+        }
 
         stage('install packages') {
             steps {
@@ -20,7 +30,6 @@ pipeline {
                 echo "Verifying..."
                 sh '''
                 cypress --version
-                cypress install
                 cypress verify
                 '''
                 echo "Installation complete."
