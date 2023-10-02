@@ -11,17 +11,9 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '7'))
-        skipDefaultCheckout(true)
     }
 
     stages {
-
-        stage('checkout SCM') {
-            steps {
-                cleanWs()
-                checkout scm
-            }
-        }
 
         stage('install packages') {
             steps {
@@ -57,6 +49,12 @@ pipeline {
                 '''
                 echo "Test publish done."
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
