@@ -32,8 +32,11 @@ Accessibility tests are performed using [Xray](https://www.getxray.app/explorato
 ## Offline Capability Testing
 Manual offline capability testing verifies that a subset of features work seamlessly without an internet connection. Chrome dev tools are used to simulate offline mode. Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-test-cases.xlsx) for test cases.
 
-## Running automated tests
-Follow these steps to set up and run cypress tests.
+## Automated tests
+Automated tests are written using Cypress and Typescript. Tests are **End-to-End** tests that simulate how users would interact with the system, mostly connecting to the API with a few endpoints stubbed. There are also **User Journeys** that cover critical functionalities for frequently occuring scenarios.
+<br/>
+<br/>
+Follow these steps to set up and run Cypress tests.
 
 ### Prerequisites
 * Node.js installed on your machine
@@ -48,14 +51,14 @@ npm install
 ```
 
 ### Running the tests
-* To run cypress tests, from the project directory in the terminal or cmd run:
+* To serve the application and open cypress, run:
 ```
-npx cypress open
+npm run serve-and-open-cypress
 ```
-* In the Cypress Test Runner, select the desired test suite under `cypress/e2e` and click on the test you want to run.
+* In the Cypress Test Runner, select the desired test suite under `cypress/e2e` and click on the test you want to run. There are two test files with End-to-End tests for each page of the application (`home-page.spec.ts, details-page.spec.ts`), and one that contains tests for User Journeys (`user-journeys.spec.ts`).
 
 ## License
 This project is licensed under the MIT License.
 
 ## Contact
-If you're a QA enthusiast like me, please connect with me on LinkedIn [here](https://www.linkedin.com/in/aneesa-saleh/). If you have any questions, suggestions or need assistance, feel free to email me at aneesa.saleh@gmail.com.
+If you're a QA enthusiast like me, please connect with me on LinkedIn [here](https://www.linkedin.com/in/aneesa-saleh/). If you have any questions,  suggestions or need assistance, feel free to email me at aneesa.saleh@gmail.com.
