@@ -24,16 +24,16 @@ User stories are saved in pdf files exported from [JIRA](https://www.atlassian.c
 Test cases were created using JIRA and [Zephyr Scale](https://smartbear.com/test-management/zephyr-scale/). They have been exported to the `test-cases` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-tests.xlsx).
 
 ### Reports
-All reports can be found in the `reports` folder. Bug reports are in the `docs/reports/bugs` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/bugs).
+All reports can be found in the `reports` folder. Bug reports are in the `docs/reports/bugs` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/bugs). Consolidated reports for Manual and Automated tests are under `summary-reports` [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/summary-reports).
 
 ## Accessibility Testing
 Accessibility tests are performed using [Xray](https://www.getxray.app/exploratory-testing). Reports are available in the `docs/reports/exploratory-tests` folder [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/reports/exploratory-tests). Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/accessibility-test-cases.xlsx) for test cases.
 
 ## Offline Capability Testing
-Manual offline capability testing verifies that a subset of features work seamlessly without an internet connection. Chrome dev tools are used to simulate offline mode. Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-test-cases.xlsx) for test cases.
+Manual offline capability testing verifies that a subset of features work seamlessly without an internet connection. Chrome dev tools are used to simulate offline mode. Click [here](https://github.com/aneesa-saleh/restaurant-reviews-qa/tree/master/docs/test-cases/offline-test-cases.xlsx) for details of test cases.
 
 ## Automated tests
-Automated tests are written using Cypress and Typescript. Tests are **End-to-End** tests that simulate how users would interact with the system, mostly connecting to the API with a few endpoints stubbed. There are also **User Journeys** that cover critical functionalities for frequently occuring scenarios.
+Automated tests are written using Cypress and Typescript. Tests are **End-to-End** tests that simulate how users would interact with the system, mostly connecting to the API with a few endpoints stubbed. There are also **User Journeys** that cover critical functionalities for frequently occuring scenarios. JUnit reports are saved in `cypress/results` after test runs.
 
 
 Follow these steps to set up and run Cypress tests.
