@@ -2,7 +2,7 @@
 # Not specifying browsers due to issues installing them on linux/arm64
 
 ARG NODE_VERSION="18.17.1"
-ARG CYPRESS_VERSION="12.17.4"
+ARG CYPRESS_VERSION="13.2.0"
 
 FROM cypress/factory:3.1.0
 
