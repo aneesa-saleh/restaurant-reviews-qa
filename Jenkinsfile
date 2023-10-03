@@ -56,10 +56,7 @@ pipeline {
 
     post {
         cleanup {
-            cleanWs(
-                deleteDirs: true,
-                patterns: [[pattern: 'node_modules', type: 'INCLUDE']]
-            )
+            sh 'rf -rf node_modules'
         }
     }
 }
