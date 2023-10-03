@@ -18,7 +18,7 @@ pipeline {
         stage('install packages') {
             steps {
                 echo "Folder contents:"
-                echo "ls"
+                sh 'ls'
                 echo "Installing packages..."
                 sh 'pnpm install'
                 echo "Verifying..."
