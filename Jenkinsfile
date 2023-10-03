@@ -56,7 +56,7 @@ pipeline {
 
     post {
         cleanup {
-            sh 'rf -rf node_modules'
+            sh 'rm -rf node_modules'
         }
     }
 }
