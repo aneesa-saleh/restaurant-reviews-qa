@@ -58,7 +58,7 @@ pipeline {
         cleanup {
             cleanWs(
                 deleteDirs: true,
-                patterns: [pattern: 'node_modules', type: 'INCLUDE']
+                patterns: [[pattern: 'node_modules', type: 'INCLUDE']]
             )
         }
     }
