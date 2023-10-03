@@ -17,6 +17,8 @@ pipeline {
 
         stage('install packages') {
             steps {
+                echo "Folder contents:"
+                echo "ls"
                 echo "Installing packages..."
                 sh 'pnpm install'
                 echo "Verifying..."
@@ -53,8 +55,11 @@ pipeline {
     }
 
     post {
-        always {
-            cleanWs()
+        cleanup {
+            cleanWs(
+                deleteDirs: true,
+                patterns: [pattern: 'node_modules', type: 'INCLUDE']
+            )
         }
     }
 }
